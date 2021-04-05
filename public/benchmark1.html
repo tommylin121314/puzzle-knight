@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Puzzle Knight Benchmark 1</title>
+		<style>
+			body {padding: 50px;}
+			.title {font-size: 50px;text-align: center; border: 5px solid black;font-weight: bold}
+			.section {padding-bottom:5px;padding-top:20px;font-weight: bold;font-size: 25px;}
+			.text-body {font-size: 18px;text-indent: 20px}
+			.image {height: 400px; width: 600px;}
+		</style>
+	</head>
+	<body>
+		<div class='title'>Puzzle Knight</div>
+		<div class='section'>Introduction</div>
+		<div class='text-body'>
+			Our game “Puzzle Knight” is a fantasy-themed top-down RPG game where our main character will have to solve puzzles and fight enemies to reach his goal. The game will make use of sprites, tilemaps, collision detection, AI, and camera-panning.
+		</div>
+		<div class='section'>Technology</div>
+		<div class='text-body'>
+			Puzzle Knight will be made using Wolfie-2D, a 2D game engine created by Richard McKenna. DirectX is being used for rendering, and our pixel art will be made with Piskel. Music and sound will be made with Audacity and GarageBand.
+		</div>
+		<div class='section'>Backstory</div>
+		<div class=text-body>
+			The Puzzle Knight is a brave and intelligent warrior, sworn by oath to protect the kingdom’s royal family. While our hero was off on an important mission, dragons launched an assault on the kingdom and escaped with the royal princess. When our hero returned from his mission and heard what happened, he sprung into action. Puzzle Knight made his way to the entrance of the Lair of Dragons, determined to bring the princess to safety...
+		</div>
+		<div class='section'>Objective</div>
+		<div class='text-body'>
+			The objective of the game is to locate the boss and slay it. The player will need to explore the map and complete puzzles in order to acquire upgrades to their equipment and skills necessary to defeat the boss.
+		</div>
+		<div class='section'>Gameplay</div>
+		<div class='text-body'>
+			<ul>
+				<li>
+					Traversing the map is a large part of the game as the map itself acts as a puzzle.
+				</li>
+				<li>
+					Interacting with objects like chests/doors may require the completion of a puzzle.
+				</li>
+				<li>
+					Enemies like goblins/skeletons are located throughout the map, and the player will use a variety of weapons(knives/swords/bows) to defeat them
+				</li>
+				<li>
+					Defeating enemies awards XP, which levels the player and awards skill points
+				</li>
+				<li>
+					Skill points can be spent at the skill tree to provide a form of progression that persists across the levels.
+				</li>
+			</ul>
+		</div>
+		<div class='section'>Controls</div>
+		<div class='text-body'>
+			<ul>
+				<li>
+					Move UP: W
+				</li>
+				<li>
+					Move LEFT: A
+				</li>
+				<li>
+					Move DOWN: S
+				</li>
+				<li>
+					Move LEFT: D
+				</li>
+				<li>
+					Attack: LEFT-CLICK
+				</li>
+				<li>
+					Interact: RIGHT-CLICK
+				</li>
+				<li>
+					Select Item: NUMPAD
+				</li>
+			</ul>
+		</div>
+		<div class='section'>Artwork</div>
+		<div class='text-body'>
+			Sprites, tilesets and animations that we will have to draw for our game. All artwork will be done in pixel from a top-down perspective. Everything will be medieval-themed.
+			<ul>
+				<li>Characters</li>
+					<ul>
+						<li>Puzzle Knight</li>
+							<ul>
+								<li>Idle</li>
+								<li>Moving</li>
+								<li>Dying</li>
+								<li>Hurt</li>
+								<li>Sword Attack</li>
+								<li>Shoot Arrow</li>
+							</ul>
+						<li>Skeleton Archer</li>
+							<ul>
+								<li>Idle</li>
+								<li>Moving</li>
+								<li>Dying</li>
+								<li>Hurt</li>
+								<li>Shoot Arrow</li>
+							</ul>
+						<li>Goblin</li>
+							<ul>
+								<li>Idle</li>
+								<li>Moving</li>
+								<li>Dying</li>
+								<li>Hurt</li>
+								<li>Sword Attack</li>
+							</ul>
+						<li>Dragon</li>
+							<ul>
+								<li>Idle</li>
+								<li>Moving</li>
+								<li>Dying</li>
+								<li>Hurt</li>
+								<li>Attack 1</li>
+								<li>Attack 2</li>
+								<li>Attack 3</li>
+							</ul>
+					</ul>
+				<li>Maps</li>
+					<ul>
+						<li>Dungeon</li>
+						<li>Grassy Plain</li>
+						<li>Dragon's Den</li>
+					</ul>
+			</ul>
+		</div>
+		<div class='section'>Sound</div>
+		<div class='text-body'>
+			Sounds we need to make for our game. Sounds include soundtracks to be played as background music and sound effects to make every action more responsive.
+			<ul>
+				<li>Music</li>
+					<ul>
+						<li>Dungeon Soundtrack</li>
+						<li>Grassy Plains Soundtrack</li>
+						<li>Dragon's Den Soundtrack</li>
+					</ul>
+				<li>SFX</li>
+					<ul>
+						<li>Hit sounds for every character</li>
+						<li>Death sounds for every character</li>
+						<li>Walking sounds for characters</li>
+						<li>Dragon sounds</li>
+						<li>Chest opening sound</li>
+						<li>Shooting arrow sound</li>
+						<li>Sword strike sound</li>
+					</ul>
+			</ul>
+		</div>
+		<div class='section'>Graphical User Interface</div>
+		<div class='text-body'>
+			How we plan to layout the UI for our many different scenes:
+			<ul>
+				<li>Splash Screen: We plan to show our logo, a start mechanism, and a brief show depicting the backstory of the game. This can be skipped.</li>
+				<img class='image' src='https://cdn.discordapp.com/attachments/824727673803767858/828771525623939153/Screen_Shot_2021-04-05_at_7.21.58_PM.png'>
+				<li>Main Menu: Player can choose to start the game, select a level, learn more about the game, and view the controls.</li>
+				<img class='image' src="https://cdn.discordapp.com/attachments/824727673803767858/828734348747735080/Screen_Shot_2021-04-05_at_4.53.34_PM.png">
+				<li>Level Select: Player can choose which level to start on. Levels will be disabled/enabled according to player progression.</li>
+				<img class='image' src="https://media.discordapp.net/attachments/824727673803767858/828734355672662026/Screen_Shot_2021-04-05_at_4.54.04_PM.png?width=1634&height=1026">
+				<li>In-game: How the GUI will look in-game when the player is playing.</li>
+				<img class='image' src="https://media.discordapp.net/attachments/824727673803767858/828693973489025103/In-Game__Screen.png?width=1144&height=1025">
+				<li>Controls: Tells the player how to play the game</li>
+				<img class='image' src='https://media.discordapp.net/attachments/824727673803767858/828714444027592754/Controls_screen.png?width=1192&height=1027'>
+				<li>Help: Displays the game's backstory, cheat codes, and developers.</li>
+				<img class='image' src="https://media.discordapp.net/attachments/824727673803767858/828714465976647750/Help_Screen_2.png?width=1192&height=1027">
+			</ul>
+	</body>
+</html>

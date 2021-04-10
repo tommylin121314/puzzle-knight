@@ -21,7 +21,7 @@
    		},
    		{
    			"source": "**",
-   			"destination": "/benchmark1.html"
+   			"destination": "/index.html"
    		}
    	]
   }

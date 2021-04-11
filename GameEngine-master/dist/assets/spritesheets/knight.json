@@ -1,0 +1,41 @@
+{
+    "name": "Knight",
+    "spriteSheetImage": "knight.png",
+    "spriteWidth": 32,
+    "spriteHeight": 32,
+    "columns": 7,
+    "rows": 6,
+    "durationType": "time",
+    "animations": [
+        { 
+            "name": "IDLE",
+            "repeat": true,
+            "frames": [ {"index": 0, "duration": 32}, {"index": 1, "duration": 32} ]
+        },
+        {
+            "name": "WALK",
+            "repeat": true,
+            "frames": [ {"index": 7, "duration": 4}, {"index": 8, "duration": 4}, {"index": 9, "duration": 4},{"index": 10, "duration": 4}, {"index": 11, "duration": 4},{"index": 4, "duration": 8} ]
+        },
+        {
+            "name": "HURT",
+            "repeat": false,
+            "frames": [ {"index": 14, "duration": 1}, {"index": 15, "duration": 1}, {"index": 16, "duration": 1}, {"index": 17, "duration": 1} ]
+        },
+        {
+            "name": "DEATH",
+            "repeat": false,
+            "frames": [ {"index": 21, "duration": 8}, {"index": 22, "duration": 8}, {"index": 23, "duration": 8}, {"index": 24, "duration": 8}, {"index": 25, "duration": 8}, {"index": 26, "duration": 8} ]
+        },
+        {   
+            "name": "MELEE_ATTACK",
+            "repeat": false,
+            "frames": [ {"index": 28, "duration": 1},{"index": 29, "duration": 1},{"index": 30, "duration": 1},{"index": 31, "duration": 1},{"index": 32, "duration": 1},{"index": 33, "duration": 1},{"index": 34, "duration": 1} ]
+        },
+        {   
+            "name": "RANGED_ATTACK",
+            "repeat": false,
+            "frames": [ {"index": 35, "duration": 1},{"index": 36, "duration": 1},{"index": 37, "duration": 1} ]
+        }
+    ]
+}

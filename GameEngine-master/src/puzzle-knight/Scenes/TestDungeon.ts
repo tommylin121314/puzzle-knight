@@ -11,7 +11,8 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Color from "../../Wolfie2D/Utils/Color";
 import Input from "../../Wolfie2D/Input/Input";
-import PlayerController from "../AI/playerController";
+import PlayerController from "../AI/Player/PlayerController";
+import EnemyController from "../AI/Enemy/EnemyController";
 
 export default class TestDungeon extends Scene {
 
@@ -42,16 +43,22 @@ export default class TestDungeon extends Scene {
         let tilemapSize: Vec2 = this.walls.size;
         this.viewport.setBounds(0, 0, tilemapSize.x, tilemapSize.y);
 
+         //Initializes player
+         this.initializePlayer();
+         this.viewport.follow(this.player);
+         this.viewport.setZoomLevel(3);
+
+
         //Creates skeleton archer
         this.skeletonArcher = this.add.animatedSprite("skeletonArcher", "primary");
         this.skeletonArcher.position.set(5*32, 5*32);
-        this.skeletonArcher.animation.play("WALK");
+        this.skeletonArcher.addAI(EnemyController, {
+            speed: 100,
+            playerPos: this.player.position,
+            skeleton: true
+        })
         console.log(this.skeletonArcher);
 
-        //Initializes player
-        this.initializePlayer();
-        this.viewport.follow(this.player);
-        this.viewport.setZoomLevel(3);
     }
 
     initializePlayer() {

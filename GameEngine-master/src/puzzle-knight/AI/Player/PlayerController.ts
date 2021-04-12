@@ -1,9 +1,9 @@
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import Input from "../../Wolfie2D/Input/Input";
-import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import AI from "../../Wolfie2D/DataTypes/Interfaces/AI";
-import BattlerAI from "./BattlerAI";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
+import GameEvent from "../../../Wolfie2D/Events/GameEvent";
+import Input from "../../../Wolfie2D/Input/Input";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import AI from "../../../Wolfie2D/DataTypes/Interfaces/AI";
+import BattlerAI from "../BattlerAI";
 
 export default class PlayerController implements BattlerAI{
     health: number

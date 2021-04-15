@@ -4,6 +4,8 @@ import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
 import Idle from "./Idle";
 import Patrol from "./Patrol";
 import Chase from "./Chase";
+import Attack from "./Attack";
+import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 
 export default class EnemyController extends StateMachineAI {
     owner: GameNode;
@@ -12,6 +14,7 @@ export default class EnemyController extends StateMachineAI {
     playerPos: Vec2;
     speed: number;
     originalPos: Vec2;
+    arrow: Sprite;
 
     initializeAI(owner: GameNode, options: Record<string, any>) {
 
@@ -34,6 +37,8 @@ export default class EnemyController extends StateMachineAI {
         this.addState('patrol', patrol);
         let chase = new Chase(this.owner, this);
         this.addState('chase', chase);
+        let attack = new Attack(this.owner, this);
+        this.addState('attack', attack);
 
         //Starting state
         this.initialize('idle');

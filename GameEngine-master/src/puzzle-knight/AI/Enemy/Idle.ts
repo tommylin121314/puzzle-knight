@@ -31,11 +31,10 @@ export default class Idle extends EnemyState {
         (<AnimatedSprite>this.owner).animation.playIfNotAlready("IDLE");
         super.update(deltaT);
         if(Date.now() - this.startTime >= this.idleDuration) {
-            console.log("TO PATROL");
             this.finished('patrol');
         }
 
-        if(this.owner.position.distanceTo(this.parent.playerPos) < 600) {
+        if(this.owner.position.distanceTo(this.parent.playerPos) < 300) {
             console.log("NOW CHASING AFTER PLAYER");
             this.finished("chase");
         }

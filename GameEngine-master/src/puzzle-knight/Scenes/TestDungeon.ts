@@ -55,7 +55,7 @@ export default class TestDungeon extends Scene {
         this.skeletonArcher.addAI(EnemyController, {
             speed: 15,
             playerPos: this.player.position,
-            skeleton: true,
+            goblin: true,
             originalPos: new Vec2(this.skeletonArcher.position.x, this.skeletonArcher.position.y)
         })
         this.skeletonArcher.addPhysics();

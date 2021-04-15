@@ -9,13 +9,18 @@ import EnemyState from "./EnemyState";
 
 export default class Chase extends EnemyState {
 
-    skeletonRange: number;
-    goblinRange: number;
+    attackRange: number;
+    aggroRange: number;
 
     onEnter() {
         (<AnimatedSprite>this.owner).animation.play("WALK");
-        this.skeletonRange = 150;
-        this.goblinRange = 20;
+        if(this.parent.skeleton) {
+            this.attackRange = 120;
+        }
+        else if(this.parent.goblin) {
+            this.attackRange = 20;
+        }
+        this.aggroRange = 300;
     }
 
     onExit(): Record<string, any> {
@@ -30,15 +35,17 @@ export default class Chase extends EnemyState {
         let playerPos = this.parent.playerPos;
         let moveDir = new Vec2(playerPos.x - currPos.x, playerPos.y - currPos.y);
 
-        if(currPos.distanceTo(playerPos) < this.skeletonRange) {
-            console.log("SKELETON RANGE");
-        }
-        if(!(currPos.distanceTo(playerPos) < this.goblinRange)) {
-            this.owner.move(moveDir.normalized().scale(this.parent.speed * deltaT));
+        this.owner.move(moveDir.normalized().scale(this.parent.speed * deltaT));
+
+        if(currPos.distanceTo(playerPos) < this.attackRange) {
+            this.finished('attack');
         }
 
+        if(currPos.distanceTo(playerPos) > this.aggroRange) {
+            this.finished('patrol');
+        }
 
-        (<AnimatedSprite>this.owner).animation.play("WALK");
+        (<AnimatedSprite>this.owner).animation.playIfNotAlready("WALK");
 
     }
 

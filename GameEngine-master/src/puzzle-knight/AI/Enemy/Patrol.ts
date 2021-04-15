@@ -62,7 +62,8 @@ export default class Patrol extends EnemyState {
 
         }
 
-        if(this.owner.position.distanceTo(this.parent.playerPos) < 600) {
+        //alert distance
+        if(this.owner.position.distanceTo(this.parent.playerPos) < 300) {
             console.log("NOW CHASING AFTER PLAYER");
             this.finished("chase");
         }

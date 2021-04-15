@@ -46,7 +46,7 @@ export default class TestDungeon extends Scene {
          //Initializes player
          this.initializePlayer();
          this.viewport.follow(this.player);
-         this.viewport.setZoomLevel(3);
+         this.viewport.setZoomLevel(2);
 
 
         //Creates skeleton archer

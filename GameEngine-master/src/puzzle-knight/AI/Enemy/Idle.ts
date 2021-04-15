@@ -34,6 +34,11 @@ export default class Idle extends EnemyState {
             console.log("TO PATROL");
             this.finished('patrol');
         }
+
+        if(this.owner.position.distanceTo(this.parent.playerPos) < 600) {
+            console.log("NOW CHASING AFTER PLAYER");
+            this.finished("chase");
+        }
     }
 
     handleInput(event: GameEvent) {

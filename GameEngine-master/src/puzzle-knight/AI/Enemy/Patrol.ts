@@ -49,7 +49,7 @@ export default class Patrol extends EnemyState {
 
             //random chance of going idle
             let rand = Math.random() * 100;
-            if(rand < 50) {
+            if(rand < 10) {
                 this.finished('idle');
             }
 
@@ -60,6 +60,11 @@ export default class Patrol extends EnemyState {
             this.moveDir = new Vec2(newDestination.x - this.owner.position.x, newDestination.y - this.owner.position.y);
             this.moveCount++;
 
+        }
+
+        if(this.owner.position.distanceTo(this.parent.playerPos) < 600) {
+            console.log("NOW CHASING AFTER PLAYER");
+            this.finished("chase");
         }
 
         //If enemy gets too far from original position, brings enemy back to origin

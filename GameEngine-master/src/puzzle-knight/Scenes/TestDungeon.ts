@@ -53,10 +53,13 @@ export default class TestDungeon extends Scene {
         this.skeletonArcher = this.add.animatedSprite("skeletonArcher", "primary");
         this.skeletonArcher.position.set(5*32, 5*32);
         this.skeletonArcher.addAI(EnemyController, {
-            speed: 100,
+            speed: 15,
             playerPos: this.player.position,
-            skeleton: true
+            skeleton: true,
+            originalPos: new Vec2(this.skeletonArcher.position.x, this.skeletonArcher.position.y)
         })
+        this.skeletonArcher.addPhysics();
+
         console.log(this.skeletonArcher);
 
     }

@@ -17,6 +17,13 @@ export default abstract class EnemyState extends State {
 
     handleInput(event: GameEvent) {    }
 
-    update(deltaT: number) {    }
+    update(deltaT: number): void {
+        if(this.owner._velocity.x > 0){
+            (<AnimatedSprite>this.owner).invertX = true;
+        }
+        else if(this.owner._velocity.x < 0){
+            (<AnimatedSprite>this.owner).invertX = false;
+        }
+    }
 
 }

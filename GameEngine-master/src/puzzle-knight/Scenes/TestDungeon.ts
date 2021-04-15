@@ -14,6 +14,7 @@ import Input from "../../Wolfie2D/Input/Input";
 import PlayerController from "../AI/Player/PlayerController";
 import EnemyController from "../AI/Enemy/EnemyController";
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
+import ArrowController from "../AI/Other/ArrowController";
 
 export default class TestDungeon extends Scene {
 
@@ -31,12 +32,15 @@ export default class TestDungeon extends Scene {
         this.load.spritesheet("knight", "assets/spritesheets/knight.json");
         this.load.tilemap("level", "assets/tilemaps/test-dungeon.json");
         this.load.spritesheet("bow", "assets/spritesheets/skeletonBow.json");
+        this.load.image("arrow", "assets/sprites/Arrow.png");
     }
 
     startScene() {
 
         this.addLayer("primary", 10);
         this.addLayer("attacks", 11);
+
+        this.receiver.subscribe("SKELETON_ATTACK");
 
         //adds tile map and walls
         let tilemapLayers = this.add.tilemap("level");
@@ -61,10 +65,10 @@ export default class TestDungeon extends Scene {
             playerPos: this.player.position,
             skeleton: true,
             originalPos: new Vec2(this.skeletonArcher.position.x, this.skeletonArcher.position.y),
-            bow: this.add.animatedSprite("bow", "primary")
+            bow: this.add.animatedSprite("bow", "attacks"),
+            arrow: this.add.sprite("arrow", "attacks")
         })
         this.skeletonArcher.addPhysics();
-
         console.log(this.skeletonArcher);
 
     }
@@ -82,6 +86,29 @@ export default class TestDungeon extends Scene {
     }
 
     updateScene() {
+        while(this.receiver.hasNextEvent()) {
 
+            //gets next event in the event queue
+            let event = this.receiver.getNextEvent();
+
+            switch(event.type) {
+                case "SKELETON_ATTACK":
+                    {
+                        let arrow = this.add.sprite("arrow", "attacks");
+                        let speed = event.data.get("speed");
+                        let direction = event.data.get("direction");
+                        arrow.scale = new Vec2(0.5, 0.5);
+                        arrow.position = event.data.get("firePos");
+                        arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
+                        arrow.addPhysics();
+                        arrow.addAI(ArrowController,
+                            {
+                                direction: direction,
+                                speed: speed
+                            }
+                        )
+                    }
+            }
+        }
     }
 }

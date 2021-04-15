@@ -32,6 +32,8 @@ export default class EnemyController extends StateMachineAI {
             this.skeleton = true;
             this.bow = options.bow;
             this.bow.visible = false;
+            this.arrow = options.arrow;
+            this.arrow.visible = false;
         }
         if(options.goblin) {
             this.goblin = true;

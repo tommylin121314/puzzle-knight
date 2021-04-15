@@ -35,8 +35,6 @@ export default class Chase extends EnemyState {
         let playerPos = this.parent.playerPos;
         let moveDir = new Vec2(playerPos.x - currPos.x, playerPos.y - currPos.y);
 
-        this.owner.move(moveDir.normalized().scale(this.parent.speed * deltaT));
-
         if(currPos.distanceTo(playerPos) < this.attackRange) {
             this.finished('attack');
         }
@@ -45,6 +43,7 @@ export default class Chase extends EnemyState {
             this.finished('patrol');
         }
 
+        this.owner.move(moveDir.normalized().scale(this.parent.speed * deltaT));
         (<AnimatedSprite>this.owner).animation.playIfNotAlready("WALK");
 
     }

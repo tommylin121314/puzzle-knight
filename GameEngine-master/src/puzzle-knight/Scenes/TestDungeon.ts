@@ -13,6 +13,7 @@ import Color from "../../Wolfie2D/Utils/Color";
 import Input from "../../Wolfie2D/Input/Input";
 import PlayerController from "../AI/Player/PlayerController";
 import EnemyController from "../AI/Enemy/EnemyController";
+import GameNode from "../../Wolfie2D/Nodes/GameNode";
 
 export default class TestDungeon extends Scene {
 
@@ -29,11 +30,13 @@ export default class TestDungeon extends Scene {
         this.load.spritesheet("skeletonArcher", "assets/spritesheets/skeletonArcher.json");
         this.load.spritesheet("knight", "assets/spritesheets/knight.json");
         this.load.tilemap("level", "assets/tilemaps/test-dungeon.json");
+        this.load.spritesheet("bow", "assets/spritesheets/skeletonBow.json");
     }
 
     startScene() {
 
         this.addLayer("primary", 10);
+        this.addLayer("attacks", 11);
 
         //adds tile map and walls
         let tilemapLayers = this.add.tilemap("level");
@@ -53,10 +56,12 @@ export default class TestDungeon extends Scene {
         this.skeletonArcher = this.add.animatedSprite("skeletonArcher", "primary");
         this.skeletonArcher.position.set(5*32, 5*32);
         this.skeletonArcher.addAI(EnemyController, {
+            attackLayer: this.getLayer("attacks"),
             speed: 15,
             playerPos: this.player.position,
-            goblin: true,
-            originalPos: new Vec2(this.skeletonArcher.position.x, this.skeletonArcher.position.y)
+            skeleton: true,
+            originalPos: new Vec2(this.skeletonArcher.position.x, this.skeletonArcher.position.y),
+            bow: this.add.animatedSprite("bow", "primary")
         })
         this.skeletonArcher.addPhysics();
 

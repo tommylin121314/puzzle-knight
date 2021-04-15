@@ -6,6 +6,8 @@ import Patrol from "./Patrol";
 import Chase from "./Chase";
 import Attack from "./Attack";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import Layer from "../../../Wolfie2D/Scene/Layer";
 
 export default class EnemyController extends StateMachineAI {
     owner: GameNode;
@@ -15,6 +17,8 @@ export default class EnemyController extends StateMachineAI {
     speed: number;
     originalPos: Vec2;
     arrow: Sprite;
+    bow: AnimatedSprite;
+    attackLayer: Layer;
 
     initializeAI(owner: GameNode, options: Record<string, any>) {
 
@@ -23,8 +27,13 @@ export default class EnemyController extends StateMachineAI {
         this.speed = options.speed;
         this.playerPos = options.playerPos;
         this.originalPos = options.originalPos;
+        this.attackLayer = options.attackLayer;
         if(options.skeleton) {
             this.skeleton = true;
+            this.bow = options.bow;
+            this.bow.visible = false;
+            this.arrow = options.arrow;
+            this.arrow.visible = false;
         }
         if(options.goblin) {
             this.goblin = true;

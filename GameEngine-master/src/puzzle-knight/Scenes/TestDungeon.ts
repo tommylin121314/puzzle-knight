@@ -15,6 +15,7 @@ import PlayerController from "../AI/Player/PlayerController";
 import EnemyController from "../AI/Enemy/EnemyController";
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
 import ArrowController from "../AI/Other/ArrowController";
+import Emitter from "../../Wolfie2D/Events/Emitter";
 
 export default class TestDungeon extends Scene {
 
@@ -41,6 +42,8 @@ export default class TestDungeon extends Scene {
         this.addLayer("attacks", 11);
 
         this.receiver.subscribe("SKELETON_ATTACK");
+        this.receiver.subscribe("PLAYER_RANGED_ATTACK");
+        this.receiver.subscribe("PLAYER_MELEE_ATTACK");
 
         //adds tile map and walls
         let tilemapLayers = this.add.tilemap("level");
@@ -80,7 +83,11 @@ export default class TestDungeon extends Scene {
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(5, 5)));
         this.player.addAI(PlayerController,
             {
-                speed: 75
+                speed: 75,
+                attackLayer: this.getLayer("attacks"),
+                emitter: new Emitter(),
+                arrow: this.add.sprite("arrow", "attacks"),
+                scene: this
             }
         )
     }
@@ -108,6 +115,33 @@ export default class TestDungeon extends Scene {
                             }
                         )
                     }
+                    case "PLAYER_RANGED_ATTACK":
+                        {
+                            let arrow = this.add.sprite("arrow", "attacks");
+                            let speed = event.data.get("speed");
+                            let direction = event.data.get("direction");
+                            arrow.scale = new Vec2(0.5, 0.5);
+                            arrow.position = event.data.get("firePos");
+                            arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
+                            arrow.addPhysics();
+                            arrow.addAI(ArrowController,
+                                {
+                                    direction: direction,
+                                    speed: speed
+                                }
+                            )
+                        }
+                        case "PLAYER_MELEE_ATTACK":
+                        {
+                            let pos = event.data.get("pos")
+                            let hitbox = new AABB(pos, new Vec2(15, 15));
+                            
+                            if(hitbox.containsPoint(this.skeletonArcher.position)){
+                                console.log("HIT");
+                            }
+                            
+                        }
+                    
             }
         }
     }

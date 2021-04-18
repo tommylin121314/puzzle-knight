@@ -1,3 +1,4 @@
+import AABB from "../../../Wolfie2D/DataTypes/Shapes/AABB";
 import State from "../../../Wolfie2D/DataTypes/State/State";
 import StateMachine from "../../../Wolfie2D/DataTypes/State/StateMachine";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
@@ -14,11 +15,17 @@ export default class Attack extends EnemyState {
     skeleton: boolean;
     goblin: boolean;
 
+    skeletonDamage: number;
+    goblinDamage: number;
+
     startTime: number;
     windUpDuration: number;
+    attacked: boolean;
 
     bow: AnimatedSprite;
     arrow: Sprite;
+
+    hitbox: AABB;
 
     playerDir: Vec2;
 
@@ -29,10 +36,11 @@ export default class Attack extends EnemyState {
 
         //times the attack
         this.startTime = Date.now();
-        this.windUpDuration = 1250;
 
         //if skeleton, sets up bow and arrow
         if(this.skeleton) {
+            this.skeletonDamage = 20;
+            this.windUpDuration = 1250;
 
             //gets bow and arrow from EnemyController
             this.bow = this.parent.bow;
@@ -51,17 +59,32 @@ export default class Attack extends EnemyState {
 
             this.bow.visible = true;
         }
+
+        if(this.goblin) {
+            this.attacked = false;
+            this.goblinDamage = 25;
+            this.windUpDuration = 350;
+            this.playerDir = this.owner.position.dirTo(this.parent.playerPos);
+            let hitboxCenter = new Vec2(this.owner.position.x + this.playerDir.x * 5, this.owner.position.y + this.playerDir.y * 5);
+            this.hitbox = new AABB(hitboxCenter, new Vec2(10, 10));
+            (<AnimatedSprite>this.owner).animation.play("ATTACK");
+        }
     }
 
     onExit() {
-        console.log("ATTACK DONE");
-        this.bow.visible = false;
 
-        this.emitter.fireEvent("SKELETON_ATTACK", {
-            direction: this.playerDir,
-            firePos: this.bow.position.clone(),
-            speed: 60
-        });
+        //if enemy was a skeleton, will fire an event that spawns and arrow with the given properties
+        if(this.parent.skeleton) {
+            this.bow.visible = false;
+            this.emitter.fireEvent("SKELETON_ATTACK", {
+                direction: this.playerDir,
+                firePos: this.bow.position.clone(),
+                speed: 120,
+                damage: this.skeletonDamage,
+                playerPos: this.parent.playerPos
+            });
+        }
+
         return{};
     }
 
@@ -93,6 +116,27 @@ export default class Attack extends EnemyState {
             else {
                 this.finished("chase");
             }
+        }
+
+        if(this.parent.goblin) {
+            (<AnimatedSprite>this.owner).animation.playIfNotAlready("ATTACK");
+
+            //times the trigger check with the down swing of the goblin's axe
+            //if player is hit, an event is fired
+            if(Date.now() - this.startTime > this.windUpDuration && (<AnimatedSprite>this.owner).animation.isPlaying("ATTACK") && !this.attacked) {
+                if(this.hitbox.overlaps(new AABB(this.parent.playerPos, new Vec2(5, 5)))){
+                    this.emitter.fireEvent("GOBLIN_HIT_PLAYER", {
+                        damage: this.goblinDamage
+                    });
+                    this.attacked = true;
+                }
+            }
+
+            //after a certain amount of time after attacking, goblin will resume chasing
+            if(Date.now() - this.startTime > 2000) {
+                this.finished("chase");
+            }
+
         }
 
     }

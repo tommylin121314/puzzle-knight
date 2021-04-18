@@ -35,7 +35,7 @@
         {   
             "name": "RANGED_ATTACK",
             "repeat": false,
-            "frames": [ {"index": 35, "duration": 1},{"index": 36, "duration": 1},{"index": 37, "duration": 1} ]
+            "frames": [ {"index": 35, "duration": 4},{"index": 36, "duration": 4},{"index": 37, "duration": 4} ]
         }
     ]
 }

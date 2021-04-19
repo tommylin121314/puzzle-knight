@@ -246,7 +246,7 @@ export default class GameLevel extends Scene {
 
     protected initPlayer(): void {
         this.player = this.add.animatedSprite("knight", "primary");
-        this.player.position.set(this.playerSpawn.x, this.playerSpawn.y);
+        this.player.position.set(this.playerSpawn.x * 32, this.playerSpawn.y * 32);
         this.player.animation.play("IDLE");
         this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 14)));
         this.player.addAI(PlayerController,
@@ -266,7 +266,7 @@ export default class GameLevel extends Scene {
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
         //Creates skeleton archer
         let enemy = this.add.animatedSprite(spriteKey, "primary");
-        enemy.position.set(pos.x, pos.y);
+        enemy.position.set(pos.x * 32, pos.y * 32);
         enemy.addAI(EnemyController, options)
         enemy.addPhysics();
         enemy.setGroup("enemy");
@@ -276,7 +276,7 @@ export default class GameLevel extends Scene {
 
     protected addHealthPotion(pos: Vec2) {
         let healthpot = this.add.sprite("healthpot", "primary");
-        healthpot.position.set(pos.x, pos.y);
+        healthpot.position.set(pos.x * 32, pos.y * 32);
         this.healthpots.push(healthpot);
     }
 

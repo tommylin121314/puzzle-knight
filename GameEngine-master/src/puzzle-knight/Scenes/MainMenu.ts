@@ -58,14 +58,3 @@ export default class MainMenu extends Scene {
 
 
         //////****** CONTROLS *******///////
-
-
-
-
-    }
-
-    updateScene() {
-        
-    }
-
-}

@@ -7,9 +7,12 @@ export default class Level1 extends GameLevel {
     private skeletonPos = [new Vec2(50, 50), new Vec2(200,400), new Vec2(60,70)];
     private goblinPos = [new Vec2(100,100), new Vec2(600,600)];
 
+    private walls: OrthogonalTilemap;
+
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/test-dungeon.json");
+        
     }
 
     unloadScene() {
@@ -21,7 +24,6 @@ export default class Level1 extends GameLevel {
         super.startScene();
 
         let tilemapsLayer = this.add.tilemap("level");
-        console.log(tilemapsLayer[1]);
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];
         let tilemapSize = this.walls.size;
         this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);

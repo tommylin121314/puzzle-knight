@@ -23,6 +23,8 @@ export default class GameLevel extends Scene {
     protected playerSpawn: Vec2;
     protected player: AnimatedSprite;
     protected respawnTimer: Timer;
+    private deathStart: number;
+    private deathAnimationLength: number = 1000;
 
     // healthbar and exp bar
     protected healthPoints: number = 100;
@@ -31,7 +33,10 @@ export default class GameLevel extends Scene {
     protected hpbarBorder: Sprite;
     protected xpbar: Sprite;
     protected xpbarBorder: Sprite;
+    public alive: boolean = true;
 
+    
+    
     // Stuff to end the level and go to the next level
     /*protected levelEndArea: Rect;
     protected nextLevel: new (...args: any) => GameLevel;
@@ -43,10 +48,9 @@ export default class GameLevel extends Scene {
     protected levelTransitionScreen: Rect;*/
 
     //enemies
-    private skeletonArcher: AnimatedSprite;
+    private enemies: Array<AnimatedSprite>;
 
-    //walls
-    walls: OrthogonalTilemap;
+    
 
     loadScene() {
         this.load.spritesheet("skeletonArcher", "assets/spritesheets/skeletonArcher.json");
@@ -66,7 +70,10 @@ export default class GameLevel extends Scene {
         this.subscribeToEvents();
         this.addUI();
         this.initViewport();
+        this.enemies = [];
 
+        
+        
         console.log(this.sceneOptions);
         this.sceneOptions = {
             physics: {
@@ -94,6 +101,7 @@ export default class GameLevel extends Scene {
         this.receiver.subscribe("SKELETON_ATTACK");
         this.receiver.subscribe("PLAYER_RANGED_ATTACK");
         this.receiver.subscribe("PLAYER_MELEE_ATTACK");
+        this.receiver.subscribe("ENEMY_HIT");
     }
 
     updateScene(deltaT: number): void {
@@ -147,6 +155,15 @@ export default class GameLevel extends Scene {
 
                 case "PLAYER_MELEE_ATTACK":
                     {
+                        let pos = event.data.get("pos")
+                        let hitbox = new AABB(pos, new Vec2(15, 15));
+                        for(let i = 0; i < this.enemies.length; i++) {
+                            if(this.enemies[i].collisionShape !== null){ 
+                                if(hitbox.containsPoint(this.enemies[i].position)){
+                                    (<EnemyController>this.enemies[i].ai).damage(event.data.get("damage"));
+                                }
+                            }
+                        }
 
                     }
                     break;
@@ -166,7 +183,8 @@ export default class GameLevel extends Scene {
                                 speed: speed,
                                 damage: 30,
                                 enemy: false,
-                                lifespan: 1000
+                                lifespan: 1000,
+                                enemies: this.enemies
                             }
                         )
                         arrow.setGroup("playerAttack");
@@ -175,7 +193,9 @@ export default class GameLevel extends Scene {
 
                 case "ENEMY_HIT":
                     {
-                        console.log("ENEMY HIT");
+                        let enemy = event.data.get("target");
+                        let damage = event.data.get("damage");
+                        (<EnemyController>enemy.ai).damage(damage);
                     }
                     break;
 
@@ -195,12 +215,29 @@ export default class GameLevel extends Scene {
         // handle player death
 
         //update hp and xp
-        this.hpbar.scale = new Vec2(this.healthPoints / 100, 1);
-        this.xpbar.scale = new Vec2(this.healthPoints / 100, 1);
-
-        if(this.healthPoints <= 0) {
-            this.player.destroy();
+        if(this.healthPoints >= 0) {
+            this.hpbar.scale = new Vec2(this.healthPoints / 100, 1);
+            this.xpbar.scale = new Vec2(this.healthPoints / 100, 1);
         }
+
+        if(this.healthPoints < 0) { 
+            this.healthPoints = 0;
+        }
+
+        if(this.alive) {
+            if(this.healthPoints <= 0) {
+                console.log("dead player");
+                this.player.animation.play("DEATH");
+                this.deathStart = Date.now();
+                this.alive = false;
+            }
+        }
+        else {
+            if(Date.now() - this.deathStart > this.deathAnimationLength) {
+                this.player.destroy();
+            }
+        }
+
     }
 
     protected initLayers() {
@@ -228,7 +265,7 @@ export default class GameLevel extends Scene {
         this.player.setGroup("player");
     }
 
-    protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>): void {
+    protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
         //Creates skeleton archer
         let enemy = this.add.animatedSprite(spriteKey, "primary");
         enemy.position.set(pos.x, pos.y);
@@ -236,6 +273,7 @@ export default class GameLevel extends Scene {
         enemy.addPhysics();
         enemy.setGroup("enemy");
         enemy.setTrigger("playerAttack", "ENEMY_HIT", null);
+        this.enemies.push(enemy);
     }
 
     protected addUI() {

@@ -9,6 +9,7 @@ import Emitter from "../../../Wolfie2D/Events/Emitter";
 import TestDungeon from "../../Scenes/TestDungeon";
 import Scene from "../../../Wolfie2D/Scene/Scene";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
+import GameLevel from "../../Scenes/GameLevel";
 
 export default class PlayerController implements BattlerAI{
     health: number = 5
@@ -25,9 +26,12 @@ export default class PlayerController implements BattlerAI{
     private loadingStartTime: number;
     private attackSpeed: number = 200;
     private usingBow: boolean = true;
-    private scene: Scene;
+    private scene: GameLevel;
     private receiver: Receiver;
     private invincible: boolean;
+
+    private meleeDamage: number = 40;
+    private rangeDamage: number = 20;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
@@ -50,6 +54,9 @@ export default class PlayerController implements BattlerAI{
     handleEvent(event: GameEvent) {    }
 
     update(deltaT: number): void {
+        if(!this.scene.alive){
+            return;
+        }
 
         //PLAYER TAKING DAMAGE EVENT HANDLING
         if(this.receiver.hasNextEvent()) {
@@ -84,7 +91,8 @@ export default class PlayerController implements BattlerAI{
                 
                 let hitboxPox = new Vec2(this.owner.position.x + dir.x*15, this.owner.position.y + dir.y*15);
                 this.emitter.fireEvent("PLAYER_MELEE_ATTACK", {
-                    pos: hitboxPox.clone()
+                    pos: hitboxPox.clone(),
+                    damage: this.meleeDamage
                 });
             }
 
@@ -167,6 +175,14 @@ export default class PlayerController implements BattlerAI{
 
             this.owner.animation.playIfNotAlready("DEATH");
         }
+    }
+
+    getMeleeDmg() { 
+        return this.meleeDamage;
+    }
+
+    getRangeDmg() {
+        return this.rangeDamage;
     }
 
     destroy() {    }

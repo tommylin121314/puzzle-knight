@@ -25,7 +25,7 @@
         {
             "name": "DEATH",
             "repeat": false,
-            "frames": [ {"index": 0, "duration": 8}, {"index": 9, "duration": 8}, {"index": 10, "duration": 8}, {"index": 11, "duration": 8}, {"index": 12, "duration": 8}, {"index": 13, "duration": 8}, {"index": 14, "duration": 8}, {"index": 15, "duration": 8}, {"index": 16, "duration": 8} ]
+            "frames": [ {"index": 0, "duration": 8}, {"index": 9, "duration": 8}, {"index": 10, "duration": 8}, {"index": 11, "duration": 8}, {"index": 12, "duration": 8}, {"index": 13, "duration": 8}, {"index": 14, "duration": 8}, {"index": 15, "duration": 8}, {"index": 16, "duration": 100} ]
         },
         {   
             "name": "ATTACK",

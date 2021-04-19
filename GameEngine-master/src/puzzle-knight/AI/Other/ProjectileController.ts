@@ -7,6 +7,7 @@ import Rect from "../../../Wolfie2D/Nodes/Graphics/Rect";
 import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
 import ProjectileState from "./ProjectileState";
 import Flying from "./Flying";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class ProjectileController extends StateMachineAI {
 
@@ -23,6 +24,8 @@ export default class ProjectileController extends StateMachineAI {
 
     enemy: boolean;
 
+    enemies: Array<AnimatedSprite>
+
     initializeAI(owner: Sprite, options: Record<string, any>) {
         this.owner = owner;
         this.direction = options.direction;
@@ -36,6 +39,8 @@ export default class ProjectileController extends StateMachineAI {
         this.damage = options.damage;
 
         this.hitPoint = this.owner.position;
+
+        this.enemies = options.enemies;
 
         let flying = new Flying(this.owner, this);
         this.addState("flying", flying);

@@ -14,7 +14,7 @@ import Input from "../../Wolfie2D/Input/Input";
 import PlayerController from "../AI/Player/PlayerController";
 import EnemyController from "../AI/Enemy/EnemyController";
 import GameNode from "../../Wolfie2D/Nodes/GameNode";
-import ArrowController from "../AI/Other/ArrowController";
+
 import Emitter from "../../Wolfie2D/Events/Emitter";
 
 export default class TestDungeon extends Scene {
@@ -108,12 +108,12 @@ export default class TestDungeon extends Scene {
                         arrow.position = event.data.get("firePos");
                         arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
                         arrow.addPhysics();
-                        arrow.addAI(ArrowController,
+                        /*arrow.addAI(ArrowController,
                             {
                                 direction: direction,
                                 speed: speed
                             }
-                        )
+                        )*/
                     }
                     case "PLAYER_RANGED_ATTACK":
                         {
@@ -124,12 +124,12 @@ export default class TestDungeon extends Scene {
                             arrow.position = event.data.get("firePos");
                             arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
                             arrow.addPhysics();
-                            arrow.addAI(ArrowController,
+                            /*arrow.addAI(ArrowController,
                                 {
                                     direction: direction,
                                     speed: speed
                                 }
-                            )
+                            )*/
                         }
                         case "PLAYER_MELEE_ATTACK":
                         {

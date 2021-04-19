@@ -6,6 +6,7 @@ export default class Level1 extends GameLevel {
 
     private skeletonPos = [new Vec2(50, 50), new Vec2(200,400), new Vec2(60,70)];
     private goblinPos = [new Vec2(100,100), new Vec2(600,600)];
+    private healthpotsPos = [new Vec2(75,80), new Vec2(120,150), new Vec2(200,350)];
 
     private walls: OrthogonalTilemap;
 
@@ -21,12 +22,20 @@ export default class Level1 extends GameLevel {
 
     startScene() {
         this.playerSpawn = new Vec2(200,200);
+
         super.startScene();
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];
         let tilemapSize = this.walls.size;
         this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
+
+        this.healthpotsPos.forEach(pos => {
+            this.addHealthPotion(pos);
+        });
+
+        this.initPlayer();
+        this.initViewport();
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -48,6 +57,7 @@ export default class Level1 extends GameLevel {
                 originalPos: pos
             })
         })
+
     }
 
     updateScene(deltaT: number) {

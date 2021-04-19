@@ -30,6 +30,8 @@ export default class PlayerController implements BattlerAI{
     private receiver: Receiver;
     private invincible: boolean;
 
+    private pots: Array<Sprite>;
+
     private meleeDamage: number = 40;
     private rangeDamage: number = 20;
 
@@ -47,6 +49,8 @@ export default class PlayerController implements BattlerAI{
         this.receiver.subscribe("PLAYER_HIT");
 
         this.invincible = false;
+
+        this.pots = options.pots;
     }
 
     activate(options: Record<string, any>) {    }
@@ -148,6 +152,10 @@ export default class PlayerController implements BattlerAI{
             this.owner.invertX = true;
         }
 
+        if(Input.isKeyJustPressed("e")) {
+            this.searchForPots();
+        }
+
         //Moves player
         if(!this.direction.isZero()) {
 
@@ -175,6 +183,17 @@ export default class PlayerController implements BattlerAI{
 
             this.owner.animation.playIfNotAlready("DEATH");
         }
+    }
+
+    searchForPots() {
+        this.pots.forEach(pot => {
+            if(pot.position.clone().distanceTo(this.owner.position) < 20) {
+                console.log("found: " + pot.position.toString());
+                this.emitter.fireEvent("HEALTH_POT", {
+                    pot: pot
+                })
+            }
+        });
     }
 
     getMeleeDmg() { 

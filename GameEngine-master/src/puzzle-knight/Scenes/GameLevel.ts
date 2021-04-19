@@ -16,6 +16,7 @@ import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 import Game from "../../Wolfie2D/Loop/Game";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Receiver from "../../Wolfie2D/Events/Receiver";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -65,6 +66,21 @@ export default class GameLevel extends Scene {
         this.subscribeToEvents();
         this.addUI();
         this.initViewport();
+
+        console.log(this.sceneOptions);
+        this.sceneOptions = {
+            physics: {
+                groups: ["wall", "enemy", "player", "playerAttack"],
+                collisions:
+                    [
+                        [0, 1, 1, 0],
+                        [1, 1, 1, 1],
+                        [1, 1, 0, 0],
+                        [0, 1, 0, 0]
+                    ]
+            }
+        }
+        console.log(this.sceneOptions);
     }
 
     initViewport() {
@@ -98,7 +114,9 @@ export default class GameLevel extends Scene {
                                 direction: direction,
                                 speed: speed,
                                 playerPos: event.data.get("playerPos"),
-                                damage: event.data.get("damage")
+                                damage: event.data.get("damage"),
+                                enemy: true,
+                                lifespan: 3000
                             }
                         )
                     }
@@ -111,6 +129,7 @@ export default class GameLevel extends Scene {
                         console.log("Event: GOBLIN HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
                         console.log("Current HP: " + this.healthPoints);
+                        this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
 
@@ -122,6 +141,7 @@ export default class GameLevel extends Scene {
                         console.log("Event: ARROW HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
                         console.log("Current HP: " + this.healthPoints);
+                        this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
 
@@ -129,14 +149,36 @@ export default class GameLevel extends Scene {
                     {
 
                     }
+                    break;
+
                 case "PLAYER_RANGED_ATTACK":
                     {
+                        let arrow = this.add.sprite("arrow", "primary");
+                        let speed = event.data.get("speed");
+                        let direction = event.data.get("direction");
+                        arrow.scale = new Vec2(0.5, 0.5);
+                        arrow.position = event.data.get("firePos");
+                        arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
+                        arrow.addPhysics();
+                        arrow.addAI(ProjectileController,
+                            {
+                                direction: direction,
+                                speed: speed,
+                                damage: 30,
+                                enemy: false,
+                                lifespan: 1000
+                            }
+                        )
+                        arrow.setGroup("playerAttack");
+                    }
+                    break;
 
-                    }
-                case "HEALTH_POTION_OBTAINED":
+                case "ENEMY_HIT":
                     {
-                        // player gains health
+                        console.log("ENEMY HIT");
                     }
+                    break;
+
                 case "LEVEL_START":
                     {
                         // Re-enable controls
@@ -155,6 +197,10 @@ export default class GameLevel extends Scene {
         //update hp and xp
         this.hpbar.scale = new Vec2(this.healthPoints / 100, 1);
         this.xpbar.scale = new Vec2(this.healthPoints / 100, 1);
+
+        if(this.healthPoints <= 0) {
+            this.player.destroy();
+        }
     }
 
     protected initLayers() {
@@ -174,10 +220,12 @@ export default class GameLevel extends Scene {
                 speed: 75,
                 attackLayer: this.getLayer("attacks"),
                 emitter: new Emitter(),
+                receiver: new Receiver(),
                 arrow: this.add.sprite("arrow", "attacks"),
                 scene: this
             }
         )
+        this.player.setGroup("player");
     }
 
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>): void {
@@ -186,6 +234,8 @@ export default class GameLevel extends Scene {
         enemy.position.set(pos.x, pos.y);
         enemy.addAI(EnemyController, options)
         enemy.addPhysics();
+        enemy.setGroup("enemy");
+        enemy.setTrigger("playerAttack", "ENEMY_HIT", null);
     }
 
     protected addUI() {

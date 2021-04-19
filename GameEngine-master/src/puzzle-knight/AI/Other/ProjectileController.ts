@@ -21,13 +21,18 @@ export default class ProjectileController extends StateMachineAI {
 
     hitPoint: Vec2;
 
+    enemy: boolean;
+
     initializeAI(owner: Sprite, options: Record<string, any>) {
         this.owner = owner;
         this.direction = options.direction;
         this.speed = options.speed;
-        this.lifespan = 4000;
+        this.lifespan = options.lifespan;
         this.startTime = Date.now();
-        this.playerPos = options.playerPos;
+        this.enemy = options.enemy;
+        if(this.enemy)
+            this.playerPos = options.playerPos;
+
         this.damage = options.damage;
 
         this.hitPoint = this.owner.position;

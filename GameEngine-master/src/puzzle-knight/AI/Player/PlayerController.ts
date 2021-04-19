@@ -8,6 +8,7 @@ import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import Emitter from "../../../Wolfie2D/Events/Emitter";
 import TestDungeon from "../../Scenes/TestDungeon";
 import Scene from "../../../Wolfie2D/Scene/Scene";
+import Receiver from "../../../Wolfie2D/Events/Receiver";
 
 export default class PlayerController implements BattlerAI{
     health: number = 5
@@ -25,6 +26,9 @@ export default class PlayerController implements BattlerAI{
     private attackSpeed: number = 200;
     private usingBow: boolean = true;
     private scene: Scene;
+    private receiver: Receiver;
+    private invincible: boolean;
+
     initializeAI(owner: AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
         this.direction = new Vec2(0, 0);
@@ -35,6 +39,10 @@ export default class PlayerController implements BattlerAI{
         this.arrow.visible = false;
         this.emitter = options.emitter;
         this.scene = options.scene;
+        this.receiver = options.receiver;
+        this.receiver.subscribe("PLAYER_HIT");
+
+        this.invincible = false;
     }
 
     activate(options: Record<string, any>) {    }
@@ -42,7 +50,19 @@ export default class PlayerController implements BattlerAI{
     handleEvent(event: GameEvent) {    }
 
     update(deltaT: number): void {
-        
+
+        //PLAYER TAKING DAMAGE EVENT HANDLING
+        if(this.receiver.hasNextEvent()) {
+            let event = this.receiver.getNextEvent();
+            if(event.type === "PLAYER_HIT" && !this.invincible) {
+                this.owner.animation.play("HURT");
+                this.invincible = true;
+            }
+        }
+
+        if(!this.owner.animation.isPlaying("HURT"))
+            this.invincible = false;
+
         if(Input.isMouseJustPressed()){
             if (this.usingBow){
                 if(this.loadingBow){
@@ -60,7 +80,7 @@ export default class PlayerController implements BattlerAI{
 
                 let dir = this.owner.position.dirTo(Input.getGlobalMousePosition());
                 
-                console.log(dir);
+
                 
                 let hitboxPox = new Vec2(this.owner.position.x + dir.x*15, this.owner.position.y + dir.y*15);
                 this.emitter.fireEvent("PLAYER_MELEE_ATTACK", {
@@ -83,11 +103,11 @@ export default class PlayerController implements BattlerAI{
 
         }
         if (Input.isKeyJustPressed("q")){
-            console.log("SWAPPING WEAPONS");
+
             this.usingBow = !this.usingBow;
         }
 
-        console.log(this.speed);
+
         //Updates direction of movement
         let xInput, yInput;
         if(Input.isKeyPressed("a") && !Input.isKeyPressed("d")) {
@@ -113,7 +133,7 @@ export default class PlayerController implements BattlerAI{
         this.direction = new Vec2(xInput, yInput);
 
         if(this.lastLookedRight) {
-            console.log("flip");
+
             this.owner.invertX = false;
         }
         else {
@@ -122,16 +142,18 @@ export default class PlayerController implements BattlerAI{
 
         //Moves player
         if(!this.direction.isZero()) {
-            console.log("MOVING");
+
             this.owner.move(this.direction.normalized().scale(this.speed * deltaT));
-            if(this.owner.animation.isPlaying("RANGED_ATTACK") || this.owner.animation.isPlaying("MELEE_ATTACK")){
+            if(this.owner.animation.isPlaying("RANGED_ATTACK") || this.owner.animation.isPlaying("MELEE_ATTACK") || 
+                this.owner.animation.isPlaying("HURT")){
             }
             else {
                 this.owner.animation.playIfNotAlready("WALK");
             }
         }
         else {
-            if(this.owner.animation.isPlaying("RANGED_ATTACK") || this.owner.animation.isPlaying("MELEE_ATTACK")){
+            if(this.owner.animation.isPlaying("RANGED_ATTACK") || this.owner.animation.isPlaying("MELEE_ATTACK") || 
+            this.owner.animation.isPlaying("HURT")){
             }
             else {
                 this.owner.animation.playIfNotAlready("IDLE");
@@ -142,7 +164,7 @@ export default class PlayerController implements BattlerAI{
     damage(damage: number): void {
         this.health -= damage;
         if(this.health <= 0) {
-            console.log("PLAYER KILLED");
+
             this.owner.animation.playIfNotAlready("DEATH");
         }
     }

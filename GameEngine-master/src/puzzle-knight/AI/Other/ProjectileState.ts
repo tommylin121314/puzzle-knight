@@ -20,11 +20,19 @@ export default abstract class ProjectileState extends State {
     handleInput(event: GameEvent) {    }
 
     update(deltaT: number): void {
-        if(new AABB(this.parent.playerPos, new Vec2(8,13)).containsPoint(this.parent.hitPoint)) {
-            this.owner.destroy();
-            this.emitter.fireEvent("ARROW_HIT_PLAYER", {
-                damage: this.parent.damage
-            });
+
+        if(this.parent.enemy) {
+
+            if(new AABB(this.parent.playerPos, new Vec2(8,13)).containsPoint(this.parent.hitPoint)) {
+                this.owner.destroy();
+                this.emitter.fireEvent("ARROW_HIT_PLAYER", {
+                    damage: this.parent.damage
+                });
+            }
+
+        }
+        else {
+            
         }
     }
 

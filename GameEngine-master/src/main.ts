@@ -4,6 +4,7 @@ import MainMenu from "./puzzle-knight/Scenes/MainMenu";
 import Dungeon1 from "./puzzle-knight/Scenes/TestDungeon";
 import Test from "./demos/AudioDemo";
 import TestDungeon from "./puzzle-knight/Scenes/TestDungeon";
+import Level1 from "./puzzle-knight/Scenes/Level1";
 
 // The main function is your entrypoint into Wolfie2D. Specify your first scene and any options here.
 (function main(){
@@ -20,7 +21,7 @@ import TestDungeon from "./puzzle-knight/Scenes/TestDungeon";
     const game = new Game(options);
 
     // Start our game
-    game.start(TestDungeon, {});
+    game.start(Level1, {});
 })();
 
 function runTests(){};

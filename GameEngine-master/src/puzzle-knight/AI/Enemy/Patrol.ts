@@ -35,7 +35,6 @@ export default class Patrol extends EnemyState {
     }
 
     onExit(): Record<string, any> {
-        console.log("TO IDLE");
         this.moveDir = Vec2.ZERO;
         (<AnimatedSprite>this.owner).animation.stop();
         return {};
@@ -64,13 +63,11 @@ export default class Patrol extends EnemyState {
 
         //alert distance
         if(this.owner.position.distanceTo(this.parent.playerPos) < 300) {
-            console.log("NOW CHASING AFTER PLAYER");
             this.finished("chase");
         }
 
         //If enemy gets too far from original position, brings enemy back to origin
         if((this.owner.position.distanceTo(this.startPosition) > this.patrolRadius)) {
-            console.log("too far...");
             this.moveDir = new Vec2(this.startPosition.x - this.owner.position.x, this.startPosition.y - this.owner.position.y);
         }
 

@@ -21,7 +21,7 @@ import Level1 from "./puzzle-knight/Scenes/Level1";
     const game = new Game(options);
 
     // Start our game
-    game.start(Level1, {});
+    game.start(MainMenu, {});
 })();
 
 function runTests(){};

@@ -17,6 +17,7 @@ import Game from "../../Wolfie2D/Loop/Game";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Receiver from "../../Wolfie2D/Events/Receiver";
+import MainMenu from "./MainMenu";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -121,9 +122,7 @@ export default class GameLevel extends Scene {
                     {
                         // player loses health
                         // play player hurt animation
-                        console.log("Event: GOBLIN HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
-                        console.log("Current HP: " + this.healthPoints);
                         this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
@@ -133,9 +132,7 @@ export default class GameLevel extends Scene {
                         // player loses health
                         // play player hurt animation
                         // remove arrow
-                        console.log("Event: ARROW HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
-                        console.log("Current HP: " + this.healthPoints);
                         this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
@@ -223,7 +220,6 @@ export default class GameLevel extends Scene {
 
         if(this.alive) {
             if(this.healthPoints <= 0) {
-                console.log("dead player");
                 this.player.animation.play("DEATH");
                 this.deathStart = Date.now();
                 this.alive = false;
@@ -233,6 +229,10 @@ export default class GameLevel extends Scene {
             if(Date.now() - this.deathStart > this.deathAnimationLength) {
                 this.player.destroy();
             }
+        }
+
+        if(Input.isKeyJustPressed("m")) {
+            this.sceneManager.changeToScene(MainMenu, {}, {});
         }
 
     }
@@ -246,7 +246,7 @@ export default class GameLevel extends Scene {
 
     protected initPlayer(): void {
         this.player = this.add.animatedSprite("knight", "primary");
-        this.player.position.set(this.playerSpawn.x * 32, this.playerSpawn.y * 32);
+        this.player.position.set(this.playerSpawn.x * 32 + 16, this.playerSpawn.y * 32 + 16);
         this.player.animation.play("IDLE");
         this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 14)));
         this.player.addAI(PlayerController,
@@ -266,7 +266,7 @@ export default class GameLevel extends Scene {
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
         //Creates skeleton archer
         let enemy = this.add.animatedSprite(spriteKey, "primary");
-        enemy.position.set(pos.x * 32, pos.y * 32);
+        enemy.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
         enemy.addAI(EnemyController, options)
         enemy.addPhysics();
         enemy.setGroup("enemy");
@@ -276,7 +276,7 @@ export default class GameLevel extends Scene {
 
     protected addHealthPotion(pos: Vec2) {
         let healthpot = this.add.sprite("healthpot", "primary");
-        healthpot.position.set(pos.x * 32, pos.y * 32);
+        healthpot.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
         this.healthpots.push(healthpot);
     }
 
@@ -287,10 +287,10 @@ export default class GameLevel extends Scene {
         this.hpbarBorder = this.add.sprite("healthbarBorder", "UIBackground")
         this.xpbarBorder = this.add.sprite("xpbarBorder", "UIBackground")
 
-        this.hpbar.position = new Vec2(200, 200);
-        this.hpbarBorder.position = new Vec2(200, 200);
-        this.xpbar.position = new Vec2(200, 230);
-        this.xpbarBorder.position = new Vec2(200, 230);
+        this.hpbar.position = new Vec2(50, 20);
+        this.hpbarBorder.position = new Vec2(50, 20);
+        this.xpbar.position = new Vec2(50, 26);
+        this.xpbarBorder.position = new Vec2(50, 26);
 
         this.xpbar.scale = new Vec2(0.05, 1);
     }

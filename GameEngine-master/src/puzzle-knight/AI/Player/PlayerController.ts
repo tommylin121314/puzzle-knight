@@ -188,7 +188,6 @@ export default class PlayerController implements BattlerAI{
     searchForPots() {
         this.pots.forEach(pot => {
             if(pot.position.clone().distanceTo(this.owner.position) < 20) {
-                console.log("found: " + pot.position.toString());
                 this.emitter.fireEvent("HEALTH_POT", {
                     pot: pot
                 })

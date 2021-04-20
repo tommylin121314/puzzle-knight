@@ -2,17 +2,17 @@ import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import GameLevel from "./GameLevel";
 
-export default class Level1 extends GameLevel {
+export default class Level6 extends GameLevel {
 
-    private skeletonPos = [new Vec2(2, 2), new Vec2(19, 4), new Vec2(31, 2), new Vec2(47, 30), new Vec2(18, 39), new Vec2(40, 39), new Vec2(46, 47), new Vec2(13, 23), new Vec2(7, 35), new Vec2(2, 18), new Vec2(13, 40), new Vec2(13, 46), new Vec2(4, 40), new Vec2(4, 46)];
-    private goblinPos = [new Vec2(3, 4), new Vec2(10, 3), new Vec2(22, 2), new Vec2(40, 11), new Vec2(32, 13), new Vec2(38, 17), new Vec2(40, 25), new Vec2(25, 29),, new Vec2(33, 25), new Vec2(33, 29),, new Vec2(28, 44), new Vec2(45, 39), new Vec2(17, 35)];
-    private healthpotsPos = [new Vec2(1, 1), new Vec2(25,1), new Vec2(36,23), new Vec2(1,17), new Vec2(19,35), new Vec2(40,39), new Vec2(46,42)];
+    private skeletonPos: Array<Vec2> = [new Vec2(26, 45), new Vec2(27, 45)];
+    private goblinPos: Array<Vec2> = [new Vec2(24, 45), new Vec2(25, 46)];
+    private healthpotsPos: Array<Vec2> = [new Vec2(25, 48)];
 
     private walls: OrthogonalTilemap;
 
     loadScene() {
         super.loadScene();
-        this.load.tilemap("level", "assets/tilemaps/level_1.json");
+        this.load.tilemap("level", "assets/tilemaps/level_6.json");
         
     }
 
@@ -21,7 +21,7 @@ export default class Level1 extends GameLevel {
     }
 
     startScene() {
-        this.playerSpawn = new Vec2(47,2);
+        this.playerSpawn = new Vec2(25, 45);
 
         super.startScene();
 

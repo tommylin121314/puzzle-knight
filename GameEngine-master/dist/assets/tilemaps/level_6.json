@@ -34,17 +34,44 @@
  "tileheight":32,
  "tilesets":[
         {
-         "firstgid":1,
-         "source":"puzzle-knight\/GameEngine-master\/dist\/assets\/tilemaps\/Grass-Tiles.tsx"
-        }, 
-        {
-         "firstgid":21,
-         "source":"Boss-Room-Tiles.tsx"
-        }, 
-        {
-         "firstgid":37,
-         "source":"puzzle-knight\/GameEngine-master\/dist\/assets\/tilemaps\/Dungeon-Tileset.tsx"
-        }],
+              "columns":4,
+              "firstgid":1,
+              "image":"Grass-Tiles.png",
+              "imageheight":160,
+              "imagewidth":128,
+              "margin":0,
+              "name":"Grass-Tiles",
+              "spacing":0,
+              "tilecount":18,
+              "tileheight":32,
+              "tilewidth":32
+       },
+       {
+              "columns":4,
+              "firstgid":21,
+              "image":"Boss-Room-Tiles.png",
+              "imageheight":128,
+              "imagewidth":128,
+              "margin":0,
+              "name":"Boss-Room-Tiles",
+              "spacing":0,
+              "tilecount":15,
+              "tileheight":32,
+              "tilewidth":32
+       },
+       {      "columns":4,
+              "firstgid":37,
+              "image":"Dungeon-Tileset.png",
+              "imageheight":160,
+              "imagewidth":128,
+              "margin":0,
+              "name":"Dungeon-Tileset",
+              "spacing":0,
+              "tilecount":17,
+              "tileheight":32,
+              "tilewidth":32
+       }
+],
  "tilewidth":32,
  "type":"map",
  "version":1.5,

@@ -72,7 +72,6 @@ export default class TestDungeon extends Scene {
             arrow: this.add.sprite("arrow", "attacks")
         })
         this.skeletonArcher.addPhysics();
-        console.log(this.skeletonArcher);
 
     }
 

@@ -11,8 +11,6 @@ export default class Death extends EnemyState {
     }
 
     onExit() {
-        console.log("enemy destroyed");
-        console.log(this.owner);
         this.owner.destroy();
         return {};
     }

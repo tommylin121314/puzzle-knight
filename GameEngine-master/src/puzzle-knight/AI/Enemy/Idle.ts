@@ -19,7 +19,6 @@ export default class Idle extends EnemyState {
         this.startTime = Date.now();
         this.idleDuration = 3000;
         (<AnimatedSprite>this.owner).animation.play("IDLE");
-        console.log("enter idle");
     }
 
     onExit(): Record<string, any> {
@@ -35,7 +34,6 @@ export default class Idle extends EnemyState {
         }
 
         if(this.owner.position.distanceTo(this.parent.playerPos) < 300) {
-            console.log("NOW CHASING AFTER PLAYER");
             this.finished("chase");
         }
     }

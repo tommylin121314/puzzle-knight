@@ -71,7 +71,6 @@ export default class EnemyController extends StateMachineAI {
     }
 
     damage(damage: number) {
-        console.log("take " + damage + " damage");
         this.changeState("hurt");
         this.health -= damage;
     }

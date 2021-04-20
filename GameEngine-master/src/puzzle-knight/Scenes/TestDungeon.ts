@@ -117,28 +117,11 @@ export default class TestDungeon extends Scene {
                     }
                     case "PLAYER_RANGED_ATTACK":
                         {
-                            let arrow = this.add.sprite("arrow", "attacks");
-                            let speed = event.data.get("speed");
-                            let direction = event.data.get("direction");
-                            arrow.scale = new Vec2(0.5, 0.5);
-                            arrow.position = event.data.get("firePos");
-                            arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
-                            arrow.addPhysics();
-                            /*arrow.addAI(ArrowController,
-                                {
-                                    direction: direction,
-                                    speed: speed
-                                }
-                            )*/
-                        }
-                        case "PLAYER_MELEE_ATTACK":
-                        {
-                            let pos = event.data.get("pos")
-                            let hitbox = new AABB(pos, new Vec2(15, 15));
                             
-                            if(hitbox.containsPoint(this.skeletonArcher.position)){
-                                console.log("HIT");
-                            }
+                        }
+                    case "PLAYER_MELEE_ATTACK":
+                        {
+                            
                             
                         }
                     

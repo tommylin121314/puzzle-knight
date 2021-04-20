@@ -7,6 +7,7 @@ import Rect from "../../../Wolfie2D/Nodes/Graphics/Rect";
 import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
 import ProjectileState from "./ProjectileState";
 import Flying from "./Flying";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
 export default class ProjectileController extends StateMachineAI {
 
@@ -21,16 +22,25 @@ export default class ProjectileController extends StateMachineAI {
 
     hitPoint: Vec2;
 
+    enemy: boolean;
+
+    enemies: Array<AnimatedSprite>
+
     initializeAI(owner: Sprite, options: Record<string, any>) {
         this.owner = owner;
         this.direction = options.direction;
         this.speed = options.speed;
-        this.lifespan = 4000;
+        this.lifespan = options.lifespan;
         this.startTime = Date.now();
-        this.playerPos = options.playerPos;
+        this.enemy = options.enemy;
+        if(this.enemy)
+            this.playerPos = options.playerPos;
+
         this.damage = options.damage;
 
         this.hitPoint = this.owner.position;
+
+        this.enemies = options.enemies;
 
         let flying = new Flying(this.owner, this);
         this.addState("flying", flying);

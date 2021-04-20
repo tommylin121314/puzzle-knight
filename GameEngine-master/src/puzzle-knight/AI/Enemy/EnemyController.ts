@@ -8,6 +8,8 @@ import Attack from "./Attack";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Layer from "../../../Wolfie2D/Scene/Layer";
+import Hurt from "./Hurt";
+import Death from "./Death";
 
 export default class EnemyController extends StateMachineAI {
     owner: GameNode;
@@ -19,6 +21,8 @@ export default class EnemyController extends StateMachineAI {
     arrow: Sprite;
     bow: AnimatedSprite;
     attackLayer: Layer;
+
+    health: number = 50;
 
     initializeAI(owner: GameNode, options: Record<string, any>) {
 
@@ -48,6 +52,10 @@ export default class EnemyController extends StateMachineAI {
         this.addState('chase', chase);
         let attack = new Attack(this.owner, this);
         this.addState('attack', attack);
+        let hurt = new Hurt(this.owner, this);
+        this.addState('hurt', hurt);
+        let death = new Death(this.owner, this);
+        this.addState('death', death);
 
         //Starting state
         this.initialize('idle');
@@ -60,5 +68,11 @@ export default class EnemyController extends StateMachineAI {
 
     update(deltaT: number) {
         super.update(deltaT);
+    }
+
+    damage(damage: number) {
+        console.log("take " + damage + " damage");
+        this.changeState("hurt");
+        this.health -= damage;
     }
 }

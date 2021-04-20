@@ -4,12 +4,16 @@ import GameLevel from "./GameLevel";
 
 export default class Level1 extends GameLevel {
 
-    private skeletonPos = [new Vec2(50, 50), new Vec2(200,400), new Vec2(60,70)];
-    private goblinPos = [new Vec2(100,100), new Vec2(600,600)];
+    private skeletonPos = [new Vec2(50, 50), new Vec2(200,400), new Vec2(60,70), new Vec2(2, 2), new Vec2(19, 4), new Vec2(31, 2), new Vec2(47, 30), new Vec2(18, 39), new Vec2(40, 39), new Vec2(46, 47), new Vec2(13, 23), new Vec2(7, 35), new Vec2(2, 18), new Vec2(13, 40), new Vec2(13, 46), new Vec2(4, 40), new Vec2(4, 46)];
+    private goblinPos = [new Vec2(100,100), new Vec2(600,600), new Vec2(3, 4), new Vec2(10, 3), new Vec2(22, 2), new Vec2(40, 11), new Vec2(32, 13), new Vec2(38, 17), new Vec2(40, 25), new Vec2(25, 29),, new Vec2(33, 25), new Vec2(33, 29),, new Vec2(28, 44), new Vec2(45, 39), new Vec2(17, 35)];
+    private healthpotsPos = [new Vec2(75,80), new Vec2(120,150), new Vec2(200,350)];
+
+    private walls: OrthogonalTilemap;
 
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/test-dungeon.json");
+        
     }
 
     unloadScene() {
@@ -18,13 +22,20 @@ export default class Level1 extends GameLevel {
 
     startScene() {
         this.playerSpawn = new Vec2(200,200);
+
         super.startScene();
 
         let tilemapsLayer = this.add.tilemap("level");
-        console.log(tilemapsLayer[1]);
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];
         let tilemapSize = this.walls.size;
         this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
+
+        this.healthpotsPos.forEach(pos => {
+            this.addHealthPotion(pos);
+        });
+
+        this.initPlayer();
+        this.initViewport();
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -46,6 +57,7 @@ export default class Level1 extends GameLevel {
                 originalPos: pos
             })
         })
+
     }
 
     updateScene(deltaT: number) {

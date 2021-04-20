@@ -16,12 +16,15 @@ import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 import Game from "../../Wolfie2D/Loop/Game";
 import Emitter from "../../Wolfie2D/Events/Emitter";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Receiver from "../../Wolfie2D/Events/Receiver";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
     protected playerSpawn: Vec2;
     protected player: AnimatedSprite;
     protected respawnTimer: Timer;
+    private deathStart: number;
+    private deathAnimationLength: number = 1000;
 
     // healthbar and exp bar
     protected healthPoints: number = 100;
@@ -30,7 +33,10 @@ export default class GameLevel extends Scene {
     protected hpbarBorder: Sprite;
     protected xpbar: Sprite;
     protected xpbarBorder: Sprite;
+    public alive: boolean = true;
 
+    
+    
     // Stuff to end the level and go to the next level
     /*protected levelEndArea: Rect;
     protected nextLevel: new (...args: any) => GameLevel;
@@ -42,10 +48,10 @@ export default class GameLevel extends Scene {
     protected levelTransitionScreen: Rect;*/
 
     //enemies
-    private skeletonArcher: AnimatedSprite;
+    private enemies: Array<AnimatedSprite>;
 
-    //walls
-    walls: OrthogonalTilemap;
+    //health potions
+    protected healthpots: Array<Sprite>;
 
     loadScene() {
         this.load.spritesheet("skeletonArcher", "assets/spritesheets/skeletonArcher.json");
@@ -57,14 +63,17 @@ export default class GameLevel extends Scene {
         this.load.image("healthbarBorder", "assets/sprites/HealthBarBorder.png");
         this.load.image("xpbar", "assets/sprites/XPBar.png");
         this.load.image("xpbarBorder", "assets/sprites/XPBarBorder.png");
+        this.load.image("healthpot", "assets/sprites/healthPot.png");
     }
 
     startScene(): void {
+
         this.initLayers();
-        this.initPlayer();
         this.subscribeToEvents();
         this.addUI();
-        this.initViewport();
+        this.enemies = [];
+        this.healthpots = [];
+
     }
 
     initViewport() {
@@ -78,6 +87,8 @@ export default class GameLevel extends Scene {
         this.receiver.subscribe("SKELETON_ATTACK");
         this.receiver.subscribe("PLAYER_RANGED_ATTACK");
         this.receiver.subscribe("PLAYER_MELEE_ATTACK");
+        this.receiver.subscribe("ENEMY_HIT");
+        this.receiver.subscribe("HEALTH_POT");
     }
 
     updateScene(deltaT: number): void {
@@ -98,7 +109,9 @@ export default class GameLevel extends Scene {
                                 direction: direction,
                                 speed: speed,
                                 playerPos: event.data.get("playerPos"),
-                                damage: event.data.get("damage")
+                                damage: event.data.get("damage"),
+                                enemy: true,
+                                lifespan: 3000
                             }
                         )
                     }
@@ -111,6 +124,7 @@ export default class GameLevel extends Scene {
                         console.log("Event: GOBLIN HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
                         console.log("Current HP: " + this.healthPoints);
+                        this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
 
@@ -122,26 +136,64 @@ export default class GameLevel extends Scene {
                         console.log("Event: ARROW HIT PLAYER, " + event.data.get("damage") + " damage taken");
                         this.healthPoints -= event.data.get("damage");
                         console.log("Current HP: " + this.healthPoints);
+                        this.emitter.fireEvent("PLAYER_HIT");
                     }
                     break;
 
                 case "PLAYER_MELEE_ATTACK":
                     {
+                        let pos = event.data.get("pos")
+                        let hitbox = new AABB(pos, new Vec2(15, 15));
+                        for(let i = 0; i < this.enemies.length; i++) {
+                            if(this.enemies[i].collisionShape !== null){ 
+                                if(hitbox.containsPoint(this.enemies[i].position)){
+                                    (<EnemyController>this.enemies[i].ai).damage(event.data.get("damage"));
+                                }
+                            }
+                        }
 
                     }
+                    break;
+
                 case "PLAYER_RANGED_ATTACK":
                     {
+                        let arrow = this.add.sprite("arrow", "primary");
+                        let speed = event.data.get("speed");
+                        let direction = event.data.get("direction");
+                        arrow.scale = new Vec2(0.5, 0.5);
+                        arrow.position = event.data.get("firePos");
+                        arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
+                        arrow.addPhysics();
+                        arrow.addAI(ProjectileController,
+                            {
+                                direction: direction,
+                                speed: speed,
+                                damage: 30,
+                                enemy: false,
+                                lifespan: 1000,
+                                enemies: this.enemies
+                            }
+                        )
+                        arrow.setGroup("playerAttack");
+                    }
+                    break;
 
-                    }
-                case "HEALTH_POTION_OBTAINED":
+                case "ENEMY_HIT":
                     {
-                        // player gains health
+                        let enemy = event.data.get("target");
+                        let damage = event.data.get("damage");
+                        (<EnemyController>enemy.ai).damage(damage);
                     }
-                case "LEVEL_START":
+                    break;
+
+                case "HEALTH_POT":
                     {
-                        // Re-enable controls
-                        Input.enableInput();
+                        let pot = event.data.get("pot");
+                        pot.destroy();
+                        this.healthPoints += 30;
                     }
+                    break;
+
                 case "LEVEL_END":
                     {
                         // next level animation
@@ -153,8 +205,36 @@ export default class GameLevel extends Scene {
         // handle player death
 
         //update hp and xp
-        this.hpbar.scale = new Vec2(this.healthPoints / 100, 1);
-        this.xpbar.scale = new Vec2(this.healthPoints / 100, 1);
+        if(this.healthPoints < 0) { 
+            this.healthPoints = 0;
+        }
+        else if(this.healthPoints > 100) {
+            this.healthPoints = 100;
+        }
+        else if(this.experiencePoints >= 100) {
+            this.experiencePoints = 0;
+        }
+
+        if(this.healthPoints >= 0) {
+            this.hpbar.scale = new Vec2(this.healthPoints / 100, 1);
+        }
+
+        this.xpbar.scale = new Vec2(this.experiencePoints / 100, 1);
+
+        if(this.alive) {
+            if(this.healthPoints <= 0) {
+                console.log("dead player");
+                this.player.animation.play("DEATH");
+                this.deathStart = Date.now();
+                this.alive = false;
+            }
+        }
+        else {
+            if(Date.now() - this.deathStart > this.deathAnimationLength) {
+                this.player.destroy();
+            }
+        }
+
     }
 
     protected initLayers() {
@@ -166,7 +246,7 @@ export default class GameLevel extends Scene {
 
     protected initPlayer(): void {
         this.player = this.add.animatedSprite("knight", "primary");
-        this.player.position.set(this.playerSpawn.x, this.playerSpawn.y);
+        this.player.position.set(this.playerSpawn.x * 32, this.playerSpawn.y * 32);
         this.player.animation.play("IDLE");
         this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 14)));
         this.player.addAI(PlayerController,
@@ -174,18 +254,30 @@ export default class GameLevel extends Scene {
                 speed: 75,
                 attackLayer: this.getLayer("attacks"),
                 emitter: new Emitter(),
+                receiver: new Receiver(),
                 arrow: this.add.sprite("arrow", "attacks"),
-                scene: this
+                scene: this,
+                pots: this.healthpots
             }
         )
+        this.player.setGroup("player");
     }
 
-    protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>): void {
+    protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
         //Creates skeleton archer
         let enemy = this.add.animatedSprite(spriteKey, "primary");
-        enemy.position.set(pos.x, pos.y);
+        enemy.position.set(pos.x * 32, pos.y * 32);
         enemy.addAI(EnemyController, options)
         enemy.addPhysics();
+        enemy.setGroup("enemy");
+        enemy.setTrigger("playerAttack", "ENEMY_HIT", null);
+        this.enemies.push(enemy);
+    }
+
+    protected addHealthPotion(pos: Vec2) {
+        let healthpot = this.add.sprite("healthpot", "primary");
+        healthpot.position.set(pos.x * 32, pos.y * 32);
+        this.healthpots.push(healthpot);
     }
 
     protected addUI() {

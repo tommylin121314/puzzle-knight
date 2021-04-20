@@ -1,0 +1,16 @@
+{
+         "firstgid":1,
+         "source":"./Dungeon-Tiles.tsx"
+        }, 
+        {
+         "firstgid":17,
+         "source":"./Boss-Room-Tiles.tsx"
+        }, 
+        {
+         "firstgid":33,
+         "source":"./Grass-Tiles.tsx"
+        }, 
+        {
+         "firstgid":53,
+         "source":"./Dungeon-Tileset.tsx"
+        }],

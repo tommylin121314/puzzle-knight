@@ -123,7 +123,8 @@ export default class GameLevel extends Scene {
                         // player loses health
                         // play player hurt animation
                         this.healthPoints -= event.data.get("damage");
-                        this.emitter.fireEvent("PLAYER_HIT");
+                        //this.emitter.fireEvent("PLAYER_HIT");
+                        (<PlayerController>this.player.ai).changeState("hurt");
                     }
                     break;
 
@@ -133,7 +134,8 @@ export default class GameLevel extends Scene {
                         // play player hurt animation
                         // remove arrow
                         this.healthPoints -= event.data.get("damage");
-                        this.emitter.fireEvent("PLAYER_HIT");
+                        //this.emitter.fireEvent("PLAYER_HIT");
+                        (<PlayerController>this.player.ai).changeState("hurt");
                     }
                     break;
 
@@ -218,7 +220,7 @@ export default class GameLevel extends Scene {
 
         this.xpbar.scale = new Vec2(this.experiencePoints / 100, 1);
 
-        if(this.alive) {
+        /*if(this.alive) {
             if(this.healthPoints <= 0) {
                 this.player.animation.play("DEATH");
                 this.deathStart = Date.now();
@@ -228,6 +230,13 @@ export default class GameLevel extends Scene {
         else {
             if(Date.now() - this.deathStart > this.deathAnimationLength) {
                 this.player.destroy();
+            }
+        }*/
+
+        if(this.alive) {
+            if(this.healthPoints <= 0) {
+                this.alive = false;
+                (<PlayerController>this.player.ai).changeState("death");
             }
         }
 

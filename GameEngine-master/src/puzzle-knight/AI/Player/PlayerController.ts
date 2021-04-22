@@ -10,30 +10,36 @@ import TestDungeon from "../../Scenes/TestDungeon";
 import Scene from "../../../Wolfie2D/Scene/Scene";
 import Receiver from "../../../Wolfie2D/Events/Receiver";
 import GameLevel from "../../Scenes/GameLevel";
+import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
+import Player_Idle from "./Player_Idle";
+import Player_Walk from "./Player_Walk";
+import Player_Attack from "./Player_Attack";
+import Player_Hurt from "./Player_Hurt";
+import Player_Death from "./Player_Death";
 
-export default class PlayerController implements BattlerAI{
+export default class PlayerController extends StateMachineAI implements BattlerAI{
     health: number = 5
     owner: AnimatedSprite
 
     //movement
-    private direction: Vec2
-    private speed: number
-    private lookDir: Vec2
-    private lastLookedRight: boolean
-    private arrow: Sprite
-    private emitter: Emitter
-    private loadingBow: boolean = false;
-    private loadingStartTime: number;
-    private attackSpeed: number = 200;
-    private usingBow: boolean = true;
-    private scene: GameLevel;
-    private receiver: Receiver;
-    private invincible: boolean;
+    direction: Vec2
+    speed: number
+    lookDir: Vec2
+    lastLookedRight: boolean
+    arrow: Sprite
+    emitter: Emitter
+    loadingBow: boolean = false;
+    loadingStartTime: number;
+    attackSpeed: number = 200;
+    usingBow: boolean = true;
+    scene: GameLevel;
+    receiver: Receiver;
+    invincible: boolean;
 
-    private pots: Array<Sprite>;
+    pots: Array<Sprite>;
 
-    private meleeDamage: number = 40;
-    private rangeDamage: number = 20;
+    meleeDamage: number = 40;
+    rangeDamage: number = 20;
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
@@ -47,30 +53,46 @@ export default class PlayerController implements BattlerAI{
         this.scene = options.scene;
         this.receiver = options.receiver;
         this.receiver.subscribe("PLAYER_HIT");
+        console.log(this.receiver);
 
         this.invincible = false;
 
         this.pots = options.pots;
+
+        let idle = new Player_Idle(this.owner, this);
+        this.addState("idle", idle);
+        let walk = new Player_Walk(this.owner, this);
+        this.addState("walk", walk);
+        let attack = new Player_Attack(this.owner, this);
+        this.addState("attack", attack);
+        let hurt = new Player_Hurt(this.owner, this);
+        this.addState("hurt", hurt);
+        let death = new Player_Death(this.owner, this);
+        this.addState("death", death);
+
+        this.initialize("idle");
+
     }
 
     activate(options: Record<string, any>) {    }
 
-    handleEvent(event: GameEvent) {    }
-
     update(deltaT: number): void {
+        super.update(deltaT);
+
+        /*
         if(!this.scene.alive){
             return;
         }
 
         //PLAYER TAKING DAMAGE EVENT HANDLING
         if(this.receiver.hasNextEvent()) {
+            console.log("has event");
             let event = this.receiver.getNextEvent();
             if(event.type === "PLAYER_HIT" && !this.invincible) {
-                this.owner.animation.play("HURT");
-                this.invincible = true;
+                console.log("hello");
             }
         }
-
+/*
         if(!this.owner.animation.isPlaying("HURT"))
             this.invincible = false;
 
@@ -175,6 +197,8 @@ export default class PlayerController implements BattlerAI{
                 this.owner.animation.playIfNotAlready("IDLE");
             }
         }
+        */
+
     }
 
     damage(damage: number): void {
@@ -201,6 +225,10 @@ export default class PlayerController implements BattlerAI{
 
     getRangeDmg() {
         return this.rangeDamage;
+    }
+
+    changeState(state: string) {
+        super.changeState(state);
     }
 
     destroy() {    }

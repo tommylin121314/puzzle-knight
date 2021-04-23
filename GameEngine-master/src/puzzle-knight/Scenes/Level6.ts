@@ -1,5 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import Color from "../../Wolfie2D/Utils/Color";
 import GameLevel from "./GameLevel";
 
 export default class Level6 extends GameLevel {
@@ -24,6 +26,8 @@ export default class Level6 extends GameLevel {
         this.playerSpawn = new Vec2(25, 45);
 
         super.startScene();
+
+        this.addLevelEnd(new Vec2(25, 5), new Vec2(2, 2));
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];
@@ -57,6 +61,13 @@ export default class Level6 extends GameLevel {
                 originalPos: pos
             })
         })
+
+        let testBox = new Rect(new Vec2(25*32, 40*32), new Vec2(64, 64));
+        testBox.setColor(Color.WHITE);
+        testBox.setLayer(this.getLayer("attacks"));
+
+        this.forced = [testBox];
+        this.dialogueList = [["hello", "this is the level made by henry", "there are pretty much no more enemies", "bye"]];
 
     }
 

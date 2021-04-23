@@ -15,7 +15,6 @@ export default class Level1 extends GameLevel {
     private healthpotsPos = [new Vec2(1, 1), new Vec2(25,1), new Vec2(36,23), new Vec2(1,17), new Vec2(19,35), new Vec2(40,39), new Vec2(46,42)];
 
     private sentences = ["Hello there knight!", "How are you doing today!", "Go kill the dragon please!!"];
-    private dialogue: Dialogue;
 
     private walls: OrthogonalTilemap;
 
@@ -33,6 +32,7 @@ export default class Level1 extends GameLevel {
         this.playerSpawn = new Vec2(47,2);
 
         super.startScene();
+        
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];
@@ -67,20 +67,20 @@ export default class Level1 extends GameLevel {
             })
         })
 
-        this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
+        // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
 
     }
 
     updateScene(deltaT: number) {
         super.updateScene(deltaT);
 
-        if(Input.isKeyJustPressed("r")) {
-            if(this.dialogue.isStarted)
-                this.dialogue.getNextLine();
-            else {
-                this.dialogue.startDialogue();
-            }
-        }
+        // if(Input.isKeyJustPressed("r")) {
+        //     if(this.dialogue.isStarted)
+        //         this.dialogue.getNextLine();
+        //     else {
+        //         this.dialogue.startDialogue();
+        //     }
+        // }
 
     }
 

@@ -34,7 +34,7 @@ export default abstract class ProjectileState extends State {
 
         }
         else {
-            
+
             this.parent.enemies.forEach(enemy => {
                 if(enemy.collisionShape !== null) {
                     if(enemy.collisionShape.containsPoint(this.parent.hitPoint)) {

@@ -19,6 +19,7 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import MainMenu from "./MainMenu";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import Dialogue from "../GameSystem/Dialogue";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -37,9 +38,16 @@ export default class GameLevel extends Scene {
     protected xpbarBorder: Sprite;
     public alive: boolean = true;
 
+    
+    protected forced: Array<Rect>;
+    protected optional: Array<Rect>;
+    protected dialogueList: Array<Array<string>>;
+    protected dialogue: Dialogue;
     protected textBox: Rect;
     protected text: Label;
     public isTalking: boolean;
+    
+    protected levelEndArea: Rect;
     
     // Stuff to end the level and go to the next level
     /*protected levelEndArea: Rect;
@@ -216,10 +224,9 @@ export default class GameLevel extends Scene {
                     }
                     break;
 
-                case "LEVEL_END":
+                case "PLAYER_ENTERED_LEVEL_END":
                     {
-                        // next level animation
-                        // go to next level
+                        console.log("level end detected");
                     }
             }
         }
@@ -267,6 +274,15 @@ export default class GameLevel extends Scene {
             this.sceneManager.changeToScene(MainMenu, {}, {});
         }
 
+        this.isTalking = this.checkForForcedDialogue();
+        if (this.isTalking) {
+            if(Input.isKeyJustPressed("r")) {
+                this.dialogue.getNextLine();
+            }
+        }
+
+
+
     }
 
     protected initLayers() {
@@ -282,6 +298,7 @@ export default class GameLevel extends Scene {
         this.player.position.set(this.playerSpawn.x * 32 + 16, this.playerSpawn.y * 32 + 16);
         this.player.animation.play("IDLE");
         this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 14)));
+        this.player.setGroup("player");
         this.player.addAI(PlayerController,
             {
                 speed: 75,
@@ -294,6 +311,16 @@ export default class GameLevel extends Scene {
             }
         )
         this.player.setGroup("player");
+    }
+
+    /**
+     * Initializes the level end area
+     */
+     protected addLevelEnd(startingTile: Vec2, size: Vec2): void {
+        this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.add(size.scaled(0.5)).scale(32), size: size.scale(32)});
+        this.levelEndArea.addPhysics(undefined, undefined, false, true);
+        // this.levelEndArea.setTrigger("player", "PLAYER_ENTERED_LEVEL_END", null);
+        this.levelEndArea.color = Color.WHITE;
     }
 
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
@@ -311,6 +338,19 @@ export default class GameLevel extends Scene {
         let healthpot = this.add.sprite("healthpot", "primary");
         healthpot.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
         this.healthpots.push(healthpot);
+    }
+
+    protected checkForForcedDialogue(): boolean {
+        if (this.isTalking) return true;
+        for (let i = 0; i < this.forced.length; i++) {
+            if (this.forced[i].contains(this.player.position.x, this.player.position.y)) {
+                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text);
+                this.forced[i].size = new Vec2(0,0);
+                this.dialogue.startDialogue()
+                return true;
+            }
+        }
+        return false;
     }
 
     protected addUI() {

@@ -38,6 +38,10 @@ export default abstract class PlayerState extends State {
             this.parent.usingBow = !this.parent.usingBow;
         }
 
+        if(Input.isKeyJustPressed("e")) {
+            this.searchForPots();
+        }
+
     }
 
     getInputDirection(): Vec2 {
@@ -46,5 +50,15 @@ export default abstract class PlayerState extends State {
 		direction.y = (Input.isKeyPressed("w") ? -1 : 0) + (Input.isKeyPressed("s") ? 1 : 0);
 		return direction;
 	}
+
+    searchForPots() {
+        this.parent.pots.forEach(pot => {
+            if(pot.position.clone().distanceTo(this.owner.position) < 20) {
+                this.emitter.fireEvent("HEALTH_POT", {
+                    pot: pot
+                })
+            }
+        });
+    }
 
 }

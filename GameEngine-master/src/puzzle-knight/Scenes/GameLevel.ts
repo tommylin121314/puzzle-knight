@@ -18,6 +18,7 @@ import Emitter from "../../Wolfie2D/Events/Emitter";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 import MainMenu from "./MainMenu";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -36,7 +37,9 @@ export default class GameLevel extends Scene {
     protected xpbarBorder: Sprite;
     public alive: boolean = true;
 
-    
+    protected textBox: Rect;
+    protected text: Label;
+    public isTalking: boolean;
     
     // Stuff to end the level and go to the next level
     /*protected levelEndArea: Rect;
@@ -45,11 +48,11 @@ export default class GameLevel extends Scene {
     protected levelEndLabel: Label;
 
     // Screen fade in/out for level start and end
-    protected levelTransitionTimer: Timer;
-    protected levelTransitionScreen: Rect;*/
+    protected levelTransitionTimer: Timer;*/
+    levelTransitionScreen: Rect;
 
     //enemies
-    private enemies: Array<AnimatedSprite>;
+    protected enemies: Array<AnimatedSprite>;
 
     //health potions
     protected healthpots: Array<Sprite>;
@@ -74,6 +77,7 @@ export default class GameLevel extends Scene {
         this.addUI();
         this.enemies = [];
         this.healthpots = [];
+        this.initDialogueUI();
 
     }
 
@@ -92,9 +96,28 @@ export default class GameLevel extends Scene {
         this.receiver.subscribe("HEALTH_POT");
     }
 
+    initDialogueUI() {
+        this.textBox = <Rect>this.add.graphic(GraphicType.RECT, "UIBackground", {
+            position: new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/7*6),
+            size: new Vec2(500, 50)
+        });
+        this.textBox.color = new Color(255,239,213,1);
+        this.textBox.borderWidth = 10;
+        this.textBox.borderColor = new Color(202,164,114,1);
+        this.textBox.visible = false;
+
+        this.text = <Label>this.add.uiElement(UIElementType.LABEL, "UIForeground", {
+            position: new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/7*6),
+            size: new Vec2(450, 40),
+            text: ''
+        });
+        this.text.visible = false;
+    }
+
     updateScene(deltaT: number): void {
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
+            if(!this.isTalking)
             switch(event.type){
                 case "SKELETON_ATTACK":
                     {
@@ -251,6 +274,7 @@ export default class GameLevel extends Scene {
         this.addUILayer("UIForeground");
         this.addLayer("primary", 10);
         this.addLayer("attacks", 11);
+
     }
 
     protected initPlayer(): void {
@@ -291,10 +315,10 @@ export default class GameLevel extends Scene {
 
     protected addUI() {
         //UI CURRENTLY ZOOMED IN
-        this.hpbar = this.add.sprite("healthbar", "UIForeground")
-        this.xpbar = this.add.sprite("xpbar", "UIForeground")
-        this.hpbarBorder = this.add.sprite("healthbarBorder", "UIBackground")
-        this.xpbarBorder = this.add.sprite("xpbarBorder", "UIBackground")
+        this.hpbar = this.add.sprite("healthbar", "UIForeground");
+        this.xpbar = this.add.sprite("xpbar", "UIForeground");
+        this.hpbarBorder = this.add.sprite("healthbarBorder", "UIBackground");
+        this.xpbarBorder = this.add.sprite("xpbarBorder", "UIBackground");
 
         this.hpbar.position = new Vec2(50, 20);
         this.hpbarBorder.position = new Vec2(50, 20);
@@ -302,6 +326,20 @@ export default class GameLevel extends Scene {
         this.xpbarBorder.position = new Vec2(50, 26);
 
         this.xpbar.scale = new Vec2(0.05, 1);
+    }
+
+    freezeEverything() {
+        this.player.freeze();
+        this.enemies.forEach(enemy => {
+            enemy.freeze();
+        });
+    }
+
+    unfreezeEverything() {
+        this.player.unfreeze();
+        this.enemies.forEach(enemy => {
+            enemy.unfreeze();
+        });
     }
 
 }

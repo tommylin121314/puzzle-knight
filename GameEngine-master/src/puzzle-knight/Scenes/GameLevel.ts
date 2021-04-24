@@ -38,6 +38,7 @@ export default class GameLevel extends Scene {
     protected xpbarBorder: Sprite;
     public alive: boolean = true;
 
+    protected walls: OrthogonalTilemap;
     
     protected forced: Array<Rect>;
     protected optional: Array<Rect>;
@@ -274,10 +275,24 @@ export default class GameLevel extends Scene {
             this.sceneManager.changeToScene(MainMenu, {}, {});
         }
 
-        this.isTalking = this.checkForForcedDialogue();
+        if(!this.isTalking)
+            this.isTalking = this.checkForForcedDialogue();
+
         if (this.isTalking) {
             if(Input.isKeyJustPressed("r")) {
                 this.dialogue.getNextLine();
+            }
+        }
+        else {
+            if(Input.isKeyJustPressed("r")) {
+                for(let i = 0; i < this.optional.length; i++) {
+                    if(this.optional[i].contains(this.player.position.x, this.player.position.y)) {
+                        let index = i + this.forced.length;
+                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text);
+                        this.dialogue.startDialogue();
+                        break;
+                    }
+                }
             }
         }
 
@@ -307,7 +322,8 @@ export default class GameLevel extends Scene {
                 receiver: new Receiver(),
                 arrow: this.add.sprite("arrow", "attacks"),
                 scene: this,
-                pots: this.healthpots
+                pots: this.healthpots,
+                walls: this.walls
             }
         )
         this.player.setGroup("player");

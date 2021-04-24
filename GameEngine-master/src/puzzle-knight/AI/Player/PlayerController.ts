@@ -16,6 +16,7 @@ import Player_Walk from "./Player_Walk";
 import Player_Attack from "./Player_Attack";
 import Player_Hurt from "./Player_Hurt";
 import Player_Death from "./Player_Death";
+import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 
 export default class PlayerController extends StateMachineAI implements BattlerAI{
     health: number = 5
@@ -35,6 +36,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
     scene: GameLevel;
     receiver: Receiver;
     invincible: boolean;
+    walls: OrthogonalTilemap;
 
     pots: Array<Sprite>;
 
@@ -52,6 +54,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.emitter = options.emitter;
         this.scene = options.scene;
         this.receiver = options.receiver;
+        this.walls = options.walls;
         this.receiver.subscribe("PLAYER_HIT");
         console.log(this.receiver);
 

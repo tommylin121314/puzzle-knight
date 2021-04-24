@@ -10,8 +10,6 @@ export default class Level6 extends GameLevel {
     private goblinPos: Array<Vec2> = [new Vec2(24, 45), new Vec2(25, 46)];
     private healthpotsPos: Array<Vec2> = [new Vec2(25, 48)];
 
-    private walls: OrthogonalTilemap;
-
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/level_6.json");
@@ -63,11 +61,16 @@ export default class Level6 extends GameLevel {
         })
 
         let testBox = new Rect(new Vec2(25*32, 40*32), new Vec2(64, 64));
-        testBox.setColor(Color.WHITE);
         testBox.setLayer(this.getLayer("attacks"));
+        let box2 = new Rect(new Vec2(25*32, 30*32), new Vec2(64,64));
+        box2.setLayer(this.getLayer("attacks"));
 
         this.forced = [testBox];
-        this.dialogueList = [["hello", "this is the level made by henry", "there are pretty much no more enemies", "bye"]];
+        this.optional = [box2];
+        this.dialogueList = [
+            ["hello", "this is the level made by henry", "there are pretty much no more enemies", "bye"],
+            ["Where you at", "Hello there","wowowowow"]
+        ];
 
     }
 

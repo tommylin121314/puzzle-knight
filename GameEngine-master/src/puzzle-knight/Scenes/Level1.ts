@@ -14,10 +14,6 @@ export default class Level1 extends GameLevel {
     private goblinPos = [new Vec2(3, 4), new Vec2(10, 3), new Vec2(22, 2), new Vec2(40, 11), new Vec2(32, 13), new Vec2(38, 17), new Vec2(40, 25), new Vec2(25, 29),, new Vec2(33, 25), new Vec2(33, 29),, new Vec2(28, 44), new Vec2(45, 39), new Vec2(17, 35)];
     private healthpotsPos = [new Vec2(1, 1), new Vec2(25,1), new Vec2(36,23), new Vec2(1,17), new Vec2(19,35), new Vec2(40,39), new Vec2(46,42)];
 
-    private sentences = ["Hello there knight!", "How are you doing today!", "Go kill the dragon please!!"];
-
-    private walls: OrthogonalTilemap;
-
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/level_1.json");
@@ -66,6 +62,10 @@ export default class Level1 extends GameLevel {
                 originalPos: pos
             })
         })
+
+        this.forced = [];
+        this.optional = [];
+        this.dialogueList = [];
 
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
 

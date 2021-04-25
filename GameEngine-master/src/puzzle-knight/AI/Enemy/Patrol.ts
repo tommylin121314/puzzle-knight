@@ -13,7 +13,7 @@ export default class Patrol extends EnemyState {
     startPosition: Vec2;
 
     //how far the enemy can wander from originalPosition
-    patrolRadius: number = 100;
+    patrolRadius: number = 50;
 
     //Direction of movement
     moveDir: Vec2;
@@ -22,6 +22,7 @@ export default class Patrol extends EnemyState {
     startTime: number;
     moveDuration: number = 3000;
     moveCount: number = 1;
+    blockMidPos: Vec2;
 
     onEnter() {
         this.moveDir = new Vec2(0, 0);
@@ -62,7 +63,7 @@ export default class Patrol extends EnemyState {
         }
 
         //alert distance
-        if(this.owner.position.distanceTo(this.parent.playerPos) < 300) {
+        if(this.owner.position.distanceTo(this.parent.playerPos) < 300 && this.seesPlayer) {
             this.finished("chase");
         }
 
@@ -70,6 +71,52 @@ export default class Patrol extends EnemyState {
         if((this.owner.position.distanceTo(this.startPosition) > this.patrolRadius)) {
             this.moveDir = new Vec2(this.startPosition.x - this.owner.position.x, this.startPosition.y - this.owner.position.y);
         }
+
+        /*
+        if(!this.moveDir.isZero()) {
+            let tilePos = new Vec2(this.owner.position.x + this.moveDir.x * 10, this.owner.position.y + this.moveDir.y * 13);
+            let blockVec = this.parent.walls.getColRowAt(tilePos);
+            let tile = this.parent.walls.getTileAtRowCol(blockVec);
+            if(tile != 0) {
+                console.log("HIT WALL");
+                this.moveDir = new Vec2(this.startPosition.x - this.owner.position.x, this.startPosition.y - this.owner.position.y);
+            }
+        }
+        */
+
+        /*if(this.moveDir.x != 0) {
+            let tilePosX = this.owner.position.x + (this.moveDir.x * 8) + (this.moveDir.x * 3);
+            let tilePosY = this.owner.position.y + 16;
+            let blockMidPos = new Vec2(tilePosX, tilePosY);
+            let blockVec = this.parent.walls.getColRowAt(blockMidPos);
+            let tileMid = this.parent.walls.getTileAtRowCol(blockVec);
+            if(tileMid != 0) {
+                this.moveDir.x = 0;
+            }
+        }
+        if(this.moveDir.y != 0) {
+            let tilePosX = this.owner.position.x;
+            let tilePosY;
+            if(this.moveDir.y === -1) {
+                tilePosY = this.owner.position.y + this.moveDir.y * 5;
+            }
+            else if(this.moveDir.y === 1) {
+                tilePosY = this.owner.position.y + this.moveDir.y * 5 + 16;
+            }
+            this.blockMidPos = new Vec2(tilePosX, tilePosY);
+            //let blockLeftPos = new Vec2(tilePosX - 8, tilePosY);
+            //let blockRightPos = new Vec2(tilePosX + 8, tilePosY);
+            let blockVec = this.parent.walls.getColRowAt(this.blockMidPos);
+            //let blockLeftVec = this.parent.walls.getColRowAt(blockLeftPos);
+            //let blockRightVec = this.parent.walls.getColRowAt(blockRightPos);
+            let tile = this.parent.walls.getTileAtRowCol(blockVec);
+            console.log("TILE: " + tile);
+            //let tileL = this.parent.walls.getTileAtRowCol(blockLeftVec);
+            //let tileR = this.parent.walls.getTileAtRowCol(blockRightVec);
+            if((tile != 0 )) {
+                this.moveDir.y = 0;
+            }
+        }*/
 
         //moves the enemy
         this.owner.move(this.moveDir.normalized().scaled(this.parent.speed * deltaT));

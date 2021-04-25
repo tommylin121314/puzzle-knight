@@ -48,40 +48,6 @@ export default abstract class PlayerState extends State {
 		let direction = Vec2.ZERO;
 		direction.x = (Input.isKeyPressed("a") ? -1 : 0) + (Input.isKeyPressed("d") ? 1 : 0);
 		direction.y = (Input.isKeyPressed("w") ? -1 : 0) + (Input.isKeyPressed("s") ? 1 : 0);
-
-        //Handles wall collisions
-        if(direction.x != 0) {
-            let tilePosX = this.owner.position.x + (direction.x * 8) + (direction.x * 3);
-            let tilePosY = this.owner.position.y + 16;
-            let blockMidPos = new Vec2(tilePosX, tilePosY);
-            let blockVec = this.parent.walls.getColRowAt(blockMidPos);
-            let tileMid = this.parent.walls.getTileAtRowCol(blockVec);
-            if(tileMid != 0) {
-                direction.x = 0;
-            }
-        }
-        if(direction.y != 0) {
-            let tilePosX = this.owner.position.x;
-            let tilePosY;
-            if(direction.y === -1) {
-                tilePosY = this.owner.position.y + direction.y * 5;
-            }
-            else if(direction.y === 1) {
-                tilePosY = this.owner.position.y + direction.y * 5 + 16;
-            }
-            let blockMidPos = new Vec2(tilePosX, tilePosY);
-            let blockLeftPos = new Vec2(tilePosX - 8, tilePosY);
-            let blockRightPos = new Vec2(tilePosX + 8, tilePosY);
-            let blockVec = this.parent.walls.getColRowAt(blockMidPos);
-            let blockLeftVec = this.parent.walls.getColRowAt(blockLeftPos);
-            let blockRightVec = this.parent.walls.getColRowAt(blockRightPos);
-            let tile = this.parent.walls.getTileAtRowCol(blockVec);
-            let tileL = this.parent.walls.getTileAtRowCol(blockLeftVec);
-            let tileR = this.parent.walls.getTileAtRowCol(blockRightVec);
-            if((tile != 0 || tileL != 0 || tileR != 0)) {
-                direction.y = 0;
-            }
-        }
 		return direction;
 	}
 

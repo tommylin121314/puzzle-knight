@@ -10,6 +10,7 @@ import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Layer from "../../../Wolfie2D/Scene/Layer";
 import Hurt from "./Hurt";
 import Death from "./Death";
+import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 
 export default class EnemyController extends StateMachineAI {
     owner: GameNode;
@@ -21,6 +22,7 @@ export default class EnemyController extends StateMachineAI {
     arrow: Sprite;
     bow: AnimatedSprite;
     attackLayer: Layer;
+    walls: OrthogonalTilemap;
 
     health: number = 50;
 
@@ -32,6 +34,7 @@ export default class EnemyController extends StateMachineAI {
         this.playerPos = options.playerPos;
         this.originalPos = options.originalPos;
         this.attackLayer = options.attackLayer;
+        this.walls = options.walls;
         if(options.skeleton) {
             this.skeleton = true;
             this.bow = options.bow;

@@ -37,7 +37,7 @@ export default abstract class ProjectileState extends State {
 
             this.parent.enemies.forEach(enemy => {
                 if(enemy.collisionShape !== null) {
-                    if(enemy.collisionShape.containsPoint(this.parent.hitPoint)) {
+                    if(new AABB(enemy.position, new Vec2(8, 12)).containsPoint(this.parent.hitPoint)) {
                         if(!this.hit) {
                             this.owner.destroy();
                             this.emitter.fireEvent("ENEMY_HIT", {
@@ -49,6 +49,10 @@ export default abstract class ProjectileState extends State {
                     }
                 }
             });
+        }
+
+        if(this.owner.collidedWithTilemap) {
+            this.owner.destroy();
         }
     }
 

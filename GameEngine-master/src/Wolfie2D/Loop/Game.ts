@@ -144,7 +144,7 @@ export default class Game {
         // Load the items with the resource manager
         this.resourceManager.loadResourcesFromQueue(() => {
             // When we're done loading, start the loop
-            this.sceneManager.changeToScene(InitialScene, options);
+            this.sceneManager.changeToScene(InitialScene, {}, options);
             this.loop.start();
         });
     }

@@ -88,6 +88,16 @@ export default class GameLevel extends Scene {
         this.healthpots = [];
         this.initDialogueUI();
 
+        this.sceneOptions.physics = {
+            groups: ["enemy", "player", "enemyAttack", "playerAttack"],
+            collisions: [
+                [0, 0, 0, 1],
+                [0, 0, 1, 0],
+                [0, 1, 0, 0],
+                [1, 0, 0, 0]
+            ]
+        }
+
     }
 
     initViewport() {
@@ -136,7 +146,7 @@ export default class GameLevel extends Scene {
                         arrow.scale = new Vec2(0.5, 0.5);
                         arrow.position = event.data.get("firePos");
                         arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
-                        arrow.addPhysics();
+                        arrow.addPhysics(new AABB(Vec2.ZERO, new Vec2(1, 1)));
                         arrow.addAI(ProjectileController,
                             {
                                 direction: direction,
@@ -147,6 +157,8 @@ export default class GameLevel extends Scene {
                                 lifespan: 3000
                             }
                         )
+                        arrow.setTrigger("player", "ARROW_HIT_PLAYER", null);
+                        arrow.setGroup("enemyAttack");
                     }
                     break;
 
@@ -194,7 +206,7 @@ export default class GameLevel extends Scene {
                         arrow.scale = new Vec2(0.5, 0.5);
                         arrow.position = event.data.get("firePos");
                         arrow.rotation = Vec2.RIGHT.angleToCCW(direction);
-                        arrow.addPhysics();
+                        arrow.addPhysics(new AABB(Vec2.ZERO, new Vec2(1, 1)));
                         arrow.addAI(ProjectileController,
                             {
                                 direction: direction,
@@ -312,7 +324,8 @@ export default class GameLevel extends Scene {
         this.player = this.add.animatedSprite("knight", "primary");
         this.player.position.set(this.playerSpawn.x * 32 + 16, this.playerSpawn.y * 32 + 16);
         this.player.animation.play("IDLE");
-        this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 14)));
+        this.player.addPhysics(new AABB(this.player.position, new Vec2(8, 6)));
+        this.player.colliderOffset = new Vec2(0, 12);
         this.player.setGroup("player");
         this.player.addAI(PlayerController,
             {
@@ -342,9 +355,10 @@ export default class GameLevel extends Scene {
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {
         //Creates skeleton archer
         let enemy = this.add.animatedSprite(spriteKey, "primary");
+        enemy.addPhysics(new AABB(new Vec2(0, 0), new Vec2(12, 6)));
+        enemy.colliderOffset = new Vec2(0, 12);
         enemy.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
         enemy.addAI(EnemyController, options)
-        enemy.addPhysics();
         enemy.setGroup("enemy");
         enemy.setTrigger("playerAttack", "ENEMY_HIT", null);
         this.enemies.push(enemy);

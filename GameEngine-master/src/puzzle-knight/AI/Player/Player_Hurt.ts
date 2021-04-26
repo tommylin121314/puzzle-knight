@@ -5,7 +5,6 @@ export default class Player_Hurt extends PlayerState {
 
     onEnter() {
         this.parent.invincible = true;
-        console.log("enter hurt");
         (<AnimatedSprite>this.owner).animation.play("HURT");
     }
 

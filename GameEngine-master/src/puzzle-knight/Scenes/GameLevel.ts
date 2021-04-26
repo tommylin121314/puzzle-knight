@@ -39,6 +39,8 @@ export default class GameLevel extends Scene {
     public alive: boolean = true;
 
     protected walls: OrthogonalTilemap;
+    protected ground: OrthogonalTilemap;
+    public mapType: string; //"ice", "boss", "grass", "fire", "castle"
     
     protected forced: Array<Rect>;
     protected optional: Array<Rect>;
@@ -46,6 +48,7 @@ export default class GameLevel extends Scene {
     protected dialogue: Dialogue;
     protected textBox: Rect;
     protected text: Label;
+    protected overlay: Rect;
     public isTalking: boolean;
     
     protected levelEndArea: Rect;
@@ -77,6 +80,7 @@ export default class GameLevel extends Scene {
         this.load.image("xpbar", "assets/sprites/XPBar.png");
         this.load.image("xpbarBorder", "assets/sprites/XPBarBorder.png");
         this.load.image("healthpot", "assets/sprites/healthPot.png");
+        this.load.image("sign", "assets/sprites/Sign-Ground.png");
     }
 
     startScene(): void {
@@ -116,6 +120,12 @@ export default class GameLevel extends Scene {
     }
 
     initDialogueUI() {
+        this.overlay = <Rect>this.add.graphic(GraphicType.RECT, "UIBackground", {
+            position: new Vec2(this.viewport.getCenter().x / 2, this.viewport.getCenter().y / 2),
+            size: new Vec2(this.viewport.getHalfSize().x, this.viewport.getHalfSize().y)
+        })
+        this.overlay.color = new Color(0, 0, 0, 0.5);
+
         this.textBox = <Rect>this.add.graphic(GraphicType.RECT, "UIBackground", {
             position: new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/7*6),
             size: new Vec2(500, 50)
@@ -300,7 +310,7 @@ export default class GameLevel extends Scene {
                 for(let i = 0; i < this.optional.length; i++) {
                     if(this.optional[i].contains(this.player.position.x, this.player.position.y)) {
                         let index = i + this.forced.length;
-                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text);
+                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text, this.overlay);
                         this.dialogue.startDialogue();
                         break;
                     }
@@ -336,7 +346,8 @@ export default class GameLevel extends Scene {
                 arrow: this.add.sprite("arrow", "attacks"),
                 scene: this,
                 pots: this.healthpots,
-                walls: this.walls
+                walls: this.walls,
+                ground: this.ground
             }
         )
         this.player.setGroup("player");
@@ -374,7 +385,7 @@ export default class GameLevel extends Scene {
         if (this.isTalking) return true;
         for (let i = 0; i < this.forced.length; i++) {
             if (this.forced[i].contains(this.player.position.x, this.player.position.y)) {
-                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text);
+                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text, this.overlay);
                 this.forced[i].size = new Vec2(0,0);
                 this.dialogue.startDialogue()
                 return true;
@@ -396,6 +407,13 @@ export default class GameLevel extends Scene {
         this.xpbarBorder.position = new Vec2(50, 26);
 
         this.xpbar.scale = new Vec2(0.05, 1);
+    }
+
+    //SCENE POSITION, NOT TILE POSITION
+    protected addDecor(spriteKey: string, pos: Vec2, scale: Vec2) {
+        let decor = this.add.sprite(spriteKey, "primary");
+        decor.position = pos.clone();
+        decor.scale = scale;
     }
 
     freezeEverything() {

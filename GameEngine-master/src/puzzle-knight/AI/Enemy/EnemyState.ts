@@ -49,12 +49,10 @@ export default abstract class EnemyState extends State {
         }
         let checkPos = this.owner.position.clone();
         let incVec = new Vec2(xIncr, yIncr);
-        console.log("CHECKING FOR WALLS");
         for(let i = 0; i < (Math.max(Math.abs(xNum), Math.abs(yNum)) === Math.abs(xNum) ? Math.abs(xNum) : Math.abs(yNum)); i++) {
             checkPos.add(incVec);
             let checkBlock = this.parent.walls.getColRowAt(checkPos);
             let tile = this.parent.walls.getTileAtRowCol(checkBlock);
-            console.log(tile);
             if(tile != 0) {
                 flag = false;
                 return false;

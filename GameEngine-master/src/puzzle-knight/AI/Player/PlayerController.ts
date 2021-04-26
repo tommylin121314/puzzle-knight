@@ -17,6 +17,7 @@ import Player_Attack from "./Player_Attack";
 import Player_Hurt from "./Player_Hurt";
 import Player_Death from "./Player_Death";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import Player_Slide from "./Player_Slide";
 
 export default class PlayerController extends StateMachineAI implements BattlerAI{
     health: number = 5
@@ -24,19 +25,24 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     //movement
     direction: Vec2
+    slideDir: Vec2
     speed: number
     lookDir: Vec2
     lastLookedRight: boolean
+    static: boolean;
+
     arrow: Sprite
     emitter: Emitter
     loadingBow: boolean = false;
     loadingStartTime: number;
     attackSpeed: number = 200;
     usingBow: boolean = true;
+
     scene: GameLevel;
     receiver: Receiver;
     invincible: boolean;
     walls: OrthogonalTilemap;
+    ground: OrthogonalTilemap;
 
     pots: Array<Sprite>;
 
@@ -55,10 +61,11 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.scene = options.scene;
         this.receiver = options.receiver;
         this.walls = options.walls;
+        this.ground = options.ground;
         this.receiver.subscribe("PLAYER_HIT");
-        console.log(this.receiver);
 
         this.invincible = false;
+        this.static = false;
 
         this.pots = options.pots;
 
@@ -72,6 +79,8 @@ export default class PlayerController extends StateMachineAI implements BattlerA
         this.addState("hurt", hurt);
         let death = new Player_Death(this.owner, this);
         this.addState("death", death);
+        let slide = new Player_Slide(this.owner, this);
+        this.addState("slide", slide);
 
         this.initialize("idle");
 

@@ -17,12 +17,13 @@ export default class Dialogue {
 
     textBox: Rect;
     text: Label;
+    overlay: Rect;
 
     isStarted: boolean;
 
     scene: GameLevel;
 
-    constructor(dialogue: Array<string>, scene: GameLevel, textBox: Rect, text: Label) {
+    constructor(dialogue: Array<string>, scene: GameLevel, textBox: Rect, text: Label, overlay: Rect) {
         this.dialogue = dialogue;
 
         this.currentSentence = -1;
@@ -31,6 +32,7 @@ export default class Dialogue {
         this.scene = scene;
         this.text = text;
         this.textBox = textBox;
+        this.overlay = overlay;
 
     }
 
@@ -38,6 +40,7 @@ export default class Dialogue {
         this.getNextLine();
         this.textBox.visible = true;
         this.text.visible = true;
+        this.overlay.visible = true;
         this.isStarted = true;
         this.scene.isTalking = true;
         this.scene.freezeEverything();
@@ -57,6 +60,7 @@ export default class Dialogue {
     endDialogue() {
         this.textBox.visible = false;
         this.text.visible = false;
+        this.overlay.visible = false;
         this.currentSentence = -1;
         this.scene.unfreezeEverything();
         this.scene.isTalking = false;

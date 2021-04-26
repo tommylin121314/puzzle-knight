@@ -8,7 +8,6 @@ export default class Player_Death extends PlayerState {
     onEnter() {
         (<AnimatedSprite>this.owner).animation.play("DEATH");
         this.deathTimer = Date.now();
-        console.log("enter");
     }
 
     onExit() {

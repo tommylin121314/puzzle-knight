@@ -1,9 +1,13 @@
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import PlayerController from "./PlayerController";
 import PlayerState from "./PlayerState";
 
 export default class Walk extends PlayerState {
 
+    feetPos: Vec2;
     onEnter() {
+        this.feetPos = new Vec2(this.owner.position.x, this.owner.position.y + 13);
         (<AnimatedSprite>this.owner).animation.play("WALK");
     }
 
@@ -19,6 +23,26 @@ export default class Walk extends PlayerState {
         if(dir.isZero()) {
             this.finished("idle");
         }
-        this.owner.move(dir.normalized().scale(this.parent.speed * deltaT));
+
+        if(this.parent.scene.mapType === 'ice' && this.onIce) {
+            if(dir.x === 1) {
+                this.parent.slideDir = new Vec2(1, 0);
+                this.finished("slide");
+            }
+            else if(dir.x === -1) {
+                this.parent.slideDir = new Vec2(-1, 0);
+                this.finished("slide");
+            }
+            else if(dir.y === 1) {
+                this.parent.slideDir = new Vec2(0, 1);
+                this.finished("slide");
+            }
+            else if(dir.y === -1) {
+                this.parent.slideDir = new Vec2(0, -1);
+                this.finished("slide");
+            }
+        }
+
+        this.owner.move(dir.normalized().clone().scale(this.parent.speed * deltaT));
     }
 }

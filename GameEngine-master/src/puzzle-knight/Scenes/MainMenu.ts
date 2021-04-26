@@ -9,6 +9,7 @@ import Layer from "../../Wolfie2D/Scene/Layer";
 import Scene from "../../Wolfie2D/Scene/Scene"
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import Ice1 from "./Ice1";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
@@ -74,7 +75,7 @@ export default class MainMenu extends Scene {
         this.playButton.onClick = () => {
             if (this.popUpIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            this.sceneManager.changeToScene(Ice1, {}, sceneOptions);
         }
 
         this.aboutButton.onClick = () => {

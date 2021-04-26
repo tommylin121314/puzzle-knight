@@ -63,7 +63,7 @@ export default class Debug {
 	 */
 	static drawBox(center: Vec2, halfSize: Vec2, filled: boolean, color: Color): void {
 		let alpha = this.debugRenderingContext.globalAlpha;
-		this.debugRenderingContext.globalAlpha = color.a;
+		this.debugRenderingContext.globalAlpha = 0.8;
 
 		if(filled){
 			this.debugRenderingContext.fillStyle = color.toString();

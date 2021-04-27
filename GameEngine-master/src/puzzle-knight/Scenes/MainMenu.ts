@@ -10,6 +10,7 @@ import Scene from "../../Wolfie2D/Scene/Scene"
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import BossRoom1 from "./BossRoom1";
+import EnterBossCS from "./EnterBossCS";
 import Ice1 from "./Ice1";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
@@ -76,7 +77,7 @@ export default class MainMenu extends Scene {
         this.playButton.onClick = () => {
             if (this.popUpIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(BossRoom1, {}, sceneOptions);
+            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
         }
 
         this.aboutButton.onClick = () => {

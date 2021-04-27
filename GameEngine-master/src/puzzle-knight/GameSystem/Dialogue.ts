@@ -20,19 +20,24 @@ export default class Dialogue {
     overlay: Rect;
 
     isStarted: boolean;
+    cutscene: boolean;
 
     scene: GameLevel;
 
-    constructor(dialogue: Array<string>, scene: GameLevel, textBox: Rect, text: Label, overlay: Rect) {
+    constructor(dialogue: Array<string>, scene: GameLevel, textBox: Rect, text: Label, overlay: Rect, cutscene: boolean) {
         this.dialogue = dialogue;
 
         this.currentSentence = -1;
         this.isStarted = false;
 
-        this.scene = scene;
         this.text = text;
         this.textBox = textBox;
-        this.overlay = overlay;
+
+        this.cutscene = cutscene;
+        if(!this.cutscene) {
+            this.overlay = overlay;
+            this.scene = scene;
+        }
 
     }
 
@@ -40,30 +45,36 @@ export default class Dialogue {
         this.getNextLine();
         this.textBox.visible = true;
         this.text.visible = true;
-        this.overlay.visible = true;
         this.isStarted = true;
-        this.scene.isTalking = true;
-        this.scene.freezeEverything();
+
+        if(!this.cutscene) {
+            this.overlay.visible = true;
+            this.scene.isTalking = true;
+            this.scene.freezeEverything();
+        }
     }
 
     getNextLine() {
         if(this.currentSentence + 1 >= this.dialogue.length) {
             this.endDialogue();
-            return;
+            return false;
         }
 
         this.currentSentence++;
         this.text.setText(this.dialogue[this.currentSentence]);
+        return true;
 
     }
 
     endDialogue() {
         this.textBox.visible = false;
         this.text.visible = false;
-        this.overlay.visible = false;
         this.currentSentence = -1;
-        this.scene.unfreezeEverything();
-        this.scene.isTalking = false;
-    }
 
+        if(!this.cutscene) {
+            this.scene.unfreezeEverything();
+            this.scene.isTalking = false;
+            this.overlay.visible = false;
+        }
+    }
 }

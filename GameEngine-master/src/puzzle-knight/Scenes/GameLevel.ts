@@ -403,7 +403,7 @@ export default class GameLevel extends Scene {
                 for(let i = 0; i < this.optional.length; i++) {
                     if(this.optional[i].contains(this.player.position.x, this.player.position.y)) {
                         let index = i + this.forced.length;
-                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text, this.overlay);
+                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text, this.overlay, false);
                         this.dialogue.startDialogue();
                         break;
                     }
@@ -478,7 +478,7 @@ export default class GameLevel extends Scene {
         if (this.isTalking) return true;
         for (let i = 0; i < this.forced.length; i++) {
             if (this.forced[i].contains(this.player.position.x, this.player.position.y)) {
-                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text, this.overlay);
+                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text, this.overlay, false);
                 this.forced[i].size = new Vec2(0,0);
                 this.dialogue.startDialogue()
                 return true;

@@ -25,11 +25,21 @@ export default abstract class ProjectileState extends State {
 
         if(this.parent.enemy) {
 
-            if(new AABB(this.parent.playerPos, new Vec2(8,13)).containsPoint(this.parent.hitPoint)) {
-                this.owner.destroy();
-                this.emitter.fireEvent("ARROW_HIT_PLAYER", {
-                    damage: this.parent.damage
-                });
+            if(this.parent.dragonNuke) {
+                if(new AABB(this.parent.playerPos, new Vec2(20,20)).containsPoint(this.parent.hitPoint)) {
+                    this.owner.destroy();
+                    this.emitter.fireEvent("FIREBALLHIT", {
+                        damage: this.parent.damage
+                    });
+                }
+            }
+            else {
+                if(new AABB(this.parent.playerPos, new Vec2(8,13)).containsPoint(this.parent.hitPoint)) {
+                    this.owner.destroy();
+                    this.emitter.fireEvent("ARROW_HIT_PLAYER", {
+                        damage: this.parent.damage
+                    });
+                }
             }
 
         }

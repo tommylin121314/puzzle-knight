@@ -11,6 +11,8 @@ export default class EnterBossCS extends Cutscene {
     }
 
     startScene() {
+        this.imageKeys = [];
+        this.images = [];
         this.sentences = ["Welcome...", "I am a dragon", "Yes I am a dragon!"];
         this.initLayers();
         this.initViewport();

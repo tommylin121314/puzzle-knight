@@ -30,6 +30,7 @@ export default class BossRoom1 extends GameLevel {
         this.playerSpawn = new Vec2(12,12);
 
         super.startScene();
+        this.hasDoor = false;
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];

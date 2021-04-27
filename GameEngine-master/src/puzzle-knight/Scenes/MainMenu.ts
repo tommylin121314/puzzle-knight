@@ -77,7 +77,7 @@ export default class MainMenu extends Scene {
         this.playButton.onClick = () => {
             if (this.popUpIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
+            this.sceneManager.changeToScene(Ice1, {}, sceneOptions);
         }
 
         this.aboutButton.onClick = () => {

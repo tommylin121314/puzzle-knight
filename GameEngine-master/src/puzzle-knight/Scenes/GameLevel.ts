@@ -53,15 +53,18 @@ export default class GameLevel extends Scene {
     public isTalking: boolean;
     
     protected levelEndArea: Rect;
-    
-    // Stuff to end the level and go to the next level
-    /*protected levelEndArea: Rect;
-    protected nextLevel: new (...args: any) => GameLevel;
-    protected levelEndTimer: Timer;
-    protected levelEndLabel: Label;
+    protected doorPos: Vec2;
+    protected keyPos: Array<Vec2>;
+    protected keys: Array<AnimatedSprite>;
+    protected nextScene: new (...args: any) => Scene;
+    protected hasDoor: boolean;
+    protected door: Sprite;
+    protected endLevelTime: number;
+    protected keysCollected: number = 0;
+    protected numKeys: number;
 
     // Screen fade in/out for level start and end
-    protected levelTransitionTimer: Timer;*/
+    protected levelTransitionTimer: Timer;
     levelTransitionScreen: Rect;
 
     //enemies
@@ -82,6 +85,8 @@ export default class GameLevel extends Scene {
         this.load.image("xpbarBorder", "assets/sprites/XPBarBorder.png");
         this.load.image("healthpot", "assets/sprites/healthPot.png");
         this.load.image("sign", "assets/sprites/Sign-Ground.png");
+        this.load.spritesheet("key", "assets/spritesheets/Key.json");
+        this.load.image("door", "assets/sprites/Door.png");
     }
 
     startScene(): void {
@@ -91,7 +96,11 @@ export default class GameLevel extends Scene {
         this.addUI();
         this.enemies = [];
         this.healthpots = [];
+        this.keys = [];
         this.initDialogueUI();
+        this.endLevelTime = Date.now();
+        this.numKeys = 2;
+        this.hasDoor = true;
 
         this.sceneOptions.physics = {
             groups: ["enemy", "player", "enemyAttack", "playerAttack"],
@@ -118,6 +127,7 @@ export default class GameLevel extends Scene {
         this.receiver.subscribe("PLAYER_MELEE_ATTACK");
         this.receiver.subscribe("ENEMY_HIT");
         this.receiver.subscribe("HEALTH_POT");
+        this.receiver.subscribe("PLAYER_ENTERED_LEVEL_END");
     }
 
     initDialogueUI() {
@@ -251,7 +261,29 @@ export default class GameLevel extends Scene {
 
                 case "PLAYER_ENTERED_LEVEL_END":
                     {
-                        console.log("level end detected");
+                        if(this.hasDoor) {
+                            if(this.keysCollected != this.numKeys) {
+                                this.dialogue = new Dialogue(["Door is locked.", "Find all the keys"], this, this.textBox, this.text, this.overlay, false);
+                                this.dialogue.startDialogue();
+                            }
+                            else {
+                                let sceneOptions = {
+                                    physics: {
+                                        groups: ["enemy", "player", "enemyAttack", "playerAttack"],
+                                        collisions: [
+                                            [0, 0, 0, 1],
+                                            [0, 0, 1, 0],
+                                            [0, 1, 0, 0],
+                                            [1, 0, 0, 0]
+                                        ]
+                                    }
+                                }
+                                this.sceneManager.changeToScene(this.nextScene, {}, sceneOptions);
+                            }
+                        }
+                        else {
+                            this.sceneManager.changeToScene(this.nextScene, {}, {});
+                        }
                     }
                     break;
 
@@ -390,6 +422,8 @@ export default class GameLevel extends Scene {
             this.sceneManager.changeToScene(MainMenu, {}, {});
         }
 
+
+        //dialogue
         if(!this.isTalking)
             this.isTalking = this.checkForForcedDialogue();
 
@@ -407,6 +441,27 @@ export default class GameLevel extends Scene {
                         this.dialogue.startDialogue();
                         break;
                     }
+                }
+            }
+        }
+
+        //pick up keys
+        if(Input.isKeyJustPressed("e")) {
+            this.keys.forEach(key => {
+                if(key != null)
+                    if(this.player.position.clone().distanceTo(key.position) < 10) {
+                        key.destroy();
+                        key = null;
+                        this.keysCollected++;
+                    }
+            });
+        }
+
+        if(this.hasDoor) {
+        //check if players at the door
+            if(new Rect(this.door.position.clone(), new Vec2(10, 10)).contains(this.player.position.clone().x, this.player.position.clone().y)) {
+                if(Date.now() - this.endLevelTime > 3000) {
+                    this.emitter.fireEvent("PLAYER_ENTERED_LEVEL_END");
                 }
             }
         }
@@ -454,6 +509,19 @@ export default class GameLevel extends Scene {
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
         // this.levelEndArea.setTrigger("player", "PLAYER_ENTERED_LEVEL_END", null);
         this.levelEndArea.color = Color.WHITE;
+    }
+
+    protected addKeys(pos: Vec2) {
+        let key = this.add.animatedSprite("key", "primary");
+        key.animation.play("IDLE");
+        key.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
+        this.keys.push(key);
+    }
+
+    protected addDoor() {
+        let door = this.add.sprite("door", "primary");
+        door.position.set(this.doorPos.x, this.doorPos.y);
+        this.door = door;
     }
 
     protected addEnemy(spriteKey: string, pos: Vec2, options: Record<string, any>) {

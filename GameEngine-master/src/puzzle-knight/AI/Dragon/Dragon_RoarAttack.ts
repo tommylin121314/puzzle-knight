@@ -30,7 +30,7 @@ export default class Dragon_RoarAttack extends DragonState {
         (<AnimatedSprite>this.owner).animation.playIfNotAlready("ROARATTACK");
 
         if(Date.now() - this.startTime > 1000) {
-            if(this.attackOp < 65) {
+            if(this.attackOp < 6.5) {
                 let direction = new Vec2(Math.random() * 2 - 1, Math.random() * 2 - 1).normalized();
                 this.emitter.fireEvent("DRAGONLEFTATTACK", {
                     firePos: this.owner.position.clone().add(new Vec2(0, -25)),

@@ -7,6 +7,7 @@ import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Dialogue from "../GameSystem/Dialogue";
+import BossRoom1 from "./BossRoom1";
 import GameLevel from "./GameLevel";
 
 export default class Ice1 extends GameLevel {
@@ -27,7 +28,12 @@ export default class Ice1 extends GameLevel {
     }
 
     startScene() {
-        this.playerSpawn = new Vec2(3,3);
+        this.playerSpawn = new Vec2(13,13);
+
+        this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
+        this.doorPos = new Vec2(13 * 32, 12 * 32);
+
+        this.nextScene = BossRoom1;
 
         super.startScene();
         this.mapType = 'ice';
@@ -72,6 +78,12 @@ export default class Ice1 extends GameLevel {
         this.signs.forEach(signPos => {
             this.addDecor("sign", signPos, new Vec2(0.6,0.6));
         });
+
+        this.keyPos.forEach(pos => {
+            this.addKeys(pos);
+        })
+
+        this.addDoor();
 
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];

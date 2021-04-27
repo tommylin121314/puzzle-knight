@@ -20,6 +20,7 @@ import Receiver from "../../Wolfie2D/Events/Receiver";
 import MainMenu from "./MainMenu";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Dialogue from "../GameSystem/Dialogue";
+import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -125,6 +126,7 @@ export default class GameLevel extends Scene {
             size: new Vec2(this.viewport.getHalfSize().x, this.viewport.getHalfSize().y)
         })
         this.overlay.color = new Color(0, 0, 0, 0.5);
+        this.overlay.visible = false;
 
         this.textBox = <Rect>this.add.graphic(GraphicType.RECT, "UIBackground", {
             position: new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/7*6),
@@ -210,7 +212,7 @@ export default class GameLevel extends Scene {
 
                 case "PLAYER_RANGED_ATTACK":
                     {
-                        let arrow = this.add.sprite("arrow", "primary");
+                        let arrow = this.add.sprite("arrow", "attacks");
                         let speed = event.data.get("speed");
                         let direction = event.data.get("direction");
                         arrow.scale = new Vec2(0.5, 0.5);
@@ -251,6 +253,97 @@ export default class GameLevel extends Scene {
                     {
                         console.log("level end detected");
                     }
+                    break;
+
+                case "DRAGONLEFTATTACK": {
+
+                    console.log("LEFT ATTACK EVENT");
+                    let direction = event.data.get("direction");
+                    let firePos = event.data.get("firePos");
+                    let speed = event.data.get("speed");
+                    let damage = event.data.get("damage");
+                    let type = event.data.get("type");
+
+                    if(type === 0) {
+                        let fireball = this.add.sprite("fireball", "attacks");
+                        fireball.scale = new Vec2(0.7, 0.7);
+                        fireball.position = firePos;
+                        fireball.rotation = Vec2.RIGHT.angleToCCW(direction.clone());
+                        fireball.addPhysics(new AABB(Vec2.ZERO, new Vec2(4, 4)));
+                        fireball.addAI(ProjectileController,
+                            {
+                                direction: direction.clone(),
+                                speed: speed,
+                                damage: damage,
+                                enemy: true,
+                                lifespan: 2500,
+                                playerPos: this.player.position
+                            }
+                        )
+                        fireball.setTrigger("player", "FIREBALLHIT", null);
+                        fireball.setGroup("enemyAttack");
+                    }
+                    else if(type === 1){
+                        console.log("shot");
+                        let fireball = this.add.sprite("bluefireball", "attacks");
+                        fireball.scale = new Vec2(1, 1);
+                        fireball.position = firePos;
+                        fireball.rotation = Vec2.RIGHT.angleToCCW(direction.clone());
+                        fireball.addPhysics(new AABB(Vec2.ZERO, new Vec2(8, 8)));
+                        fireball.addAI(ProjectileController,
+                            {
+                                direction: direction.clone(),
+                                speed: speed,
+                                damage: damage,
+                                enemy: true,
+                                lifespan: 2500,
+                                playerPos: this.player.position
+                            }
+                        )
+                        fireball.setTrigger("player", "FIREBALLHIT", null);
+                        fireball.setGroup("enemyAttack");
+                    }
+                    else if(type === 2) {
+                        let fireball = this.add.sprite("firenuke", "attacks");
+                        fireball.scale = new Vec2(2.5, 2.5);
+                        fireball.position = firePos;
+                        fireball.tweens.add("spin", {
+                            startDelay: 0,
+                            duration: 2000,
+                            effects: [
+                                {
+                                    property: "rotation",
+                                    start: 0,
+                                    end: 8 * Math.PI,
+                                    ease: EaseFunctionType.OUT_SINE
+                                }
+                            ]
+                        });
+                        fireball.tweens.play("spin");
+                        fireball.addPhysics(new AABB(Vec2.ZERO, new Vec2(20, 20)));
+                        fireball.addAI(ProjectileController,
+                            {
+                                direction: direction.clone(),
+                                speed: speed,
+                                damage: damage,
+                                enemy: true,
+                                lifespan: 2500,
+                                playerPos: this.player.position,
+                                dragonNuke: true
+                            }
+                        )
+                        fireball.setTrigger("player", "FIREBALLHIT", null);
+                        fireball.setGroup("enemyAttack");
+                    }
+
+                    break;
+                }
+
+                case "FIREBALLHIT": {
+                    this.healthPoints -= event.data.get("damage");
+                    (<PlayerController>this.player.ai).changeState("hurt");
+                    break;
+                }
             }
         }
 
@@ -310,7 +403,7 @@ export default class GameLevel extends Scene {
                 for(let i = 0; i < this.optional.length; i++) {
                     if(this.optional[i].contains(this.player.position.x, this.player.position.y)) {
                         let index = i + this.forced.length;
-                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text, this.overlay);
+                        this.dialogue = new Dialogue(this.dialogueList[index], this, this.textBox, this.text, this.overlay, false);
                         this.dialogue.startDialogue();
                         break;
                     }
@@ -385,7 +478,7 @@ export default class GameLevel extends Scene {
         if (this.isTalking) return true;
         for (let i = 0; i < this.forced.length; i++) {
             if (this.forced[i].contains(this.player.position.x, this.player.position.y)) {
-                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text, this.overlay);
+                this.dialogue = new Dialogue(this.dialogueList[i], this, this.textBox, this.text, this.overlay, false);
                 this.forced[i].size = new Vec2(0,0);
                 this.dialogue.startDialogue()
                 return true;

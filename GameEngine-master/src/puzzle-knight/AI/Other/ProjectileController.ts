@@ -23,6 +23,7 @@ export default class ProjectileController extends StateMachineAI {
     hitPoint: Vec2;
 
     enemy: boolean;
+    dragonNuke: boolean;
 
     enemies: Array<AnimatedSprite>
 
@@ -35,6 +36,8 @@ export default class ProjectileController extends StateMachineAI {
         this.enemy = options.enemy;
         if(this.enemy)
             this.playerPos = options.playerPos;
+
+        this.dragonNuke = options.dragonNuke;
 
         this.damage = options.damage;
 

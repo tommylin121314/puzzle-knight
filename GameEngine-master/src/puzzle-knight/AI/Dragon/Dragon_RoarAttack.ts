@@ -1,6 +1,7 @@
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import DragonState from "./DragonState";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class Dragon_RoarAttack extends DragonState {
 
@@ -14,6 +15,7 @@ export default class Dragon_RoarAttack extends DragonState {
     onEnter() {
         console.log("ENTER: ROAR");
         (<AnimatedSprite>this.owner).animation.play("ROARATTACK");
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "dragon", loop: false, holdReference: false});
         this.attackOp = Math.random() * 10;
         this.startTime = Date.now();
         this.pulseCounter = 1;

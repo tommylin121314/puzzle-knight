@@ -20,6 +20,12 @@ export default class BossRoom1 extends GameLevel {
         this.load.image("fireball", "assets/sprites/Fireball.png");
         this.load.image("bluefireball", "assets/sprites/BlueFireBall.png");
         this.load.image("firenuke", "assets/sprites/FireNuke.png");
+
+        this.load.audio("bow", "assets/sounds/arrow_sound.wav");
+        this.load.audio("melee", "assets/sounds/swish.wav");
+        this.load.audio("hit", "assets/sounds/impact.wav");
+        this.load.audio("dragon", "assets/sounds/dragon.wav");
+        this.load.audio("walk", "assets/sounds/walk3.wav");
     }
 
     unloadScene() {

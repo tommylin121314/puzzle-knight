@@ -2,12 +2,14 @@ import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../../Wolfie2D/Input/Input";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import PlayerState from "./PlayerState";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class Player_Attack extends PlayerState {
 
     loadingStartTime: number;
     attackSpeed: number;
     shotFired: boolean;
+    audioTracker = 0;
 
     onEnter() {
         (<AnimatedSprite>this.owner).animation.play("RANGED_ATTACK");
@@ -17,7 +19,7 @@ export default class Player_Attack extends PlayerState {
     }
 
     onExit() {
-
+        this.audioTracker = 0;
         return {};
     }
 
@@ -43,6 +45,9 @@ export default class Player_Attack extends PlayerState {
                     firePos: this.owner.position.clone(),
                     speed: 300
                 });
+                
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "bow", loop: false, holdReference: false});
+
                 this.shotFired = true;
             }
 
@@ -53,7 +58,10 @@ export default class Player_Attack extends PlayerState {
         }
         else{
             (<AnimatedSprite>this.owner).animation.playIfNotAlready("MELEE_ATTACK");
-
+            if (this.audioTracker == 0){
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "melee", loop: false, holdReference: false});
+                this.audioTracker = 1;
+            }
             let dir = this.owner.position.dirTo(Input.getGlobalMousePosition());
 
             let hitboxPox = new Vec2(this.owner.position.x + dir.x*15, this.owner.position.y + dir.y*15);
@@ -62,6 +70,7 @@ export default class Player_Attack extends PlayerState {
                 damage: this.parent.meleeDamage
             });
 
+            
             if(!(<AnimatedSprite>this.owner).animation.isPlaying("MELEE_ATTACK")) {
                 this.finished("idle");
             }

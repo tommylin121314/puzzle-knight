@@ -20,6 +20,14 @@ export default class Ice1 extends GameLevel {
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/Ice-1.json");
+
+        //LOADING AUDIO
+        this.load.audio("bow", "assets/sounds/arrow_sound.wav");
+        this.load.audio("melee", "assets/sounds/swish.wav");
+        this.load.audio("hit", "assets/sounds/impact.wav");
+        this.load.audio("dragon", "assets/sounds/dragon.wav");
+        this.load.audio("walk", "assets/sounds/walk3.wav");
+        
         
     }
 

@@ -8,6 +8,7 @@ import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import Sprite from "../../../Wolfie2D/Nodes/Sprites/Sprite";
 import EnemyController from "./EnemyController";
 import EnemyState from "./EnemyState";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class Attack extends EnemyState {
 
@@ -56,7 +57,7 @@ export default class Attack extends EnemyState {
             this.bow.position.add(new Vec2(this.playerDir.x * 5, this.playerDir.y * 5));
 
             this.bow.animation.play("SHOOT");
-
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "bow", loop: false, holdReference: false});
             this.bow.visible = true;
         }
 
@@ -68,6 +69,8 @@ export default class Attack extends EnemyState {
             let hitboxCenter = new Vec2(this.owner.position.x + this.playerDir.x * 5, this.owner.position.y + this.playerDir.y * 5);
             this.hitbox = new AABB(hitboxCenter, new Vec2(10, 10));
             (<AnimatedSprite>this.owner).animation.play("ATTACK");
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "melee", loop: false, holdReference: false});
+
         }
     }
 

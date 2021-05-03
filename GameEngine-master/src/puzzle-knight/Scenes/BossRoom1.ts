@@ -1,6 +1,8 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import EventQueue from "../../Wolfie2D/Events/EventQueue";
+import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Input from "../../Wolfie2D/Input/Input";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
@@ -28,6 +30,7 @@ export default class BossRoom1 extends GameLevel {
         this.load.audio("hit", "assets/sounds/impact.wav");
         this.load.audio("dragon", "assets/sounds/dragon.wav");
         this.load.audio("walk", "assets/sounds/walk3.wav");
+        this.load.audio("soundtrack", "assets/sounds/BossSoundtrack.wav");
     }
 
     unloadScene() {
@@ -36,6 +39,7 @@ export default class BossRoom1 extends GameLevel {
 
     startScene() {
         this.playerSpawn = new Vec2(12,12);
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: "soundtrack", loop: true, volume: 0.3})
 
         super.startScene();
         this.hasDoor = false;
@@ -62,6 +66,7 @@ export default class BossRoom1 extends GameLevel {
         dragon.position = new Vec2(8 * 32,8  * 32 - 64);
         dragon.addPhysics(new AABB(Vec2.ZERO, new Vec2(12, 16)));
         dragon.colliderOffset = new Vec2(0, -10);
+        dragon.setGroup('enemy');
         dragon.scale = new Vec2(1.7, 1.7);
         dragon.addAI(DragonController, {
             playerPos: this.player.position,

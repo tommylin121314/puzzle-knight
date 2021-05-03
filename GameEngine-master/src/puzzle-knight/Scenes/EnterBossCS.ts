@@ -5,7 +5,7 @@ import Cutscene from "./Cutscene";
 export default class EnterBossCS extends Cutscene {
 
     startTime: number;
-    dialogueDelay: number = 1000;
+    dialogueDelay: number = 300;
     started: boolean;
 
     loadScene() {
@@ -31,8 +31,8 @@ export default class EnterBossCS extends Cutscene {
         this.initLayers();
         this.initViewport();
         let background = this.initBackground("splashart");
-        background.position = new Vec2(300, 200);
-        background.scale = new Vec2(2, 2);
+        background.position = new Vec2(150, 100);
+        background.scale = new Vec2(1, 1);
 
     }
 

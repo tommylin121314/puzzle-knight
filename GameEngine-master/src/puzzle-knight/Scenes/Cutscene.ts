@@ -49,14 +49,14 @@ export default class Cutscene extends Scene {
     }
 
     initViewport() {
-        this.viewport.setCenter(new Vec2(300, 200));
-        this.viewport.setHalfSize(new Vec2(300, 200));
+        this.viewport.setCenter(new Vec2(150, 100));
+        this.viewport.setHalfSize(new Vec2(150, 100));
     }
 
     initDialogue() {
         this.textBox = <Rect>this.add.graphic(GraphicType.RECT, "UI", {
-            position: new Vec2(300, 325),
-            size: new Vec2(500, 75)
+            position: new Vec2(150, 162),
+            size: new Vec2(250, 38)
         });
         this.textBox.color = new Color(255,239,213,1);
         this.textBox.borderWidth = 10;
@@ -64,8 +64,8 @@ export default class Cutscene extends Scene {
         this.textBox.visible = false;
 
         this.text = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {
-            position: new Vec2(300, 325),
-            size: new Vec2(450, 60),
+            position: new Vec2(150, 162),
+            size: new Vec2(225, 30),
             text: ''
         });
         this.text.visible = false;

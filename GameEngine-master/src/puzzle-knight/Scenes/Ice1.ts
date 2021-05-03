@@ -8,6 +8,7 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
+import EnterBossCS from "./EnterBossCS";
 import GameLevel from "./GameLevel";
 
 export default class Ice1 extends GameLevel {
@@ -41,7 +42,7 @@ export default class Ice1 extends GameLevel {
         this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
         this.doorPos = new Vec2(13 * 32, 12 * 32);
 
-        this.nextScene = BossRoom1;
+        this.nextScene = EnterBossCS;
 
         super.startScene();
         this.mapType = 'ice';

@@ -1,12 +1,12 @@
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import EventQueue from "../../Wolfie2D/Events/EventQueue";
-import Input from "../../Wolfie2D/Input/Input";
-import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
-import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
-import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import Dialogue from "../GameSystem/Dialogue";
-import GameLevel from "./GameLevel";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
+import EventQueue from "../../../Wolfie2D/Events/EventQueue";
+import Input from "../../../Wolfie2D/Input/Input";
+import { GraphicType } from "../../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import Rect from "../../../Wolfie2D/Nodes/Graphics/Rect";
+import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import Label from "../../../Wolfie2D/Nodes/UIElements/Label";
+import Dialogue from "../../GameSystem/Dialogue";
+import GameLevel from "../GameLevel";
 
 export default class Level1 extends GameLevel {
 

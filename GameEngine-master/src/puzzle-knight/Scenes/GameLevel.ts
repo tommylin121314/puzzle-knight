@@ -21,6 +21,7 @@ import MainMenu from "./MainMenu";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Dialogue from "../GameSystem/Dialogue";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class GameLevel extends Scene {
     // Every level will have a player, which will be an animated sprite
@@ -87,10 +88,12 @@ export default class GameLevel extends Scene {
         this.load.image("sign", "assets/sprites/Sign-Ground.png");
         this.load.spritesheet("key", "assets/spritesheets/Key.json");
         this.load.image("door", "assets/sprites/Door.png");
+
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
     }
 
     startScene(): void {
-
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: 'soundtrack', loop: true});
         this.initLayers();
         this.subscribeToEvents();
         this.addUI();
@@ -460,7 +463,8 @@ export default class GameLevel extends Scene {
         if(this.hasDoor) {
         //check if players at the door
             if(new Rect(this.door.position.clone(), new Vec2(10, 10)).contains(this.player.position.clone().x, this.player.position.clone().y)) {
-                if(Date.now() - this.endLevelTime > 3000) {
+                if(Date.now() - this.endLevelTime > 5000) {
+                    this.endLevelTime = Date.now();
                     this.emitter.fireEvent("PLAYER_ENTERED_LEVEL_END");
                 }
             }

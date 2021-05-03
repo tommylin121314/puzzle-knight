@@ -10,7 +10,7 @@ import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
 import GameLevel from "./GameLevel";
 
-export default class grassLevel extends GameLevel {
+export default class purpleDungeonLevel extends GameLevel {
 
     private goblinPos = [new Vec2(3, 8), new Vec2(5, 9), new Vec2(2, 14), new Vec2(12, 7), new Vec2(19, 3), new Vec2(8, 17), new Vec2(10, 19), new Vec2(20, 12), new Vec2(22, 19)];
     private skeletonPos = [new Vec2(14, 3), new Vec2(2, 10), new Vec2(17, 7), new Vec2(23, 2), new Vec2(10, 13), new Vec2(7, 13), new Vec2(2, 22), new Vec2(2, 23), new Vec2(23, 15), new Vec2(23, 23), new Vec2(23, 6)];
@@ -88,8 +88,7 @@ export default class grassLevel extends GameLevel {
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
         this.dialogueList = [
-            ["Entering Ice Dungeon: Chamber One..."],
-            ["Watch out. The ice is slipper."]
+            ["This dungeon is pretty creepy...", "The dragon should live deeper underground."]
         ];
 
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);

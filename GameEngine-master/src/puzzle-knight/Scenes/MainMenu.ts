@@ -12,12 +12,12 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import BossRoom1 from "./BossRoom1";
 import EnterBossCS from "./EnterBossCS";
 import Ice1 from "./Ice1";
-import Level1 from "./Level1";
-import Level2 from "./Level2";
-import Level3 from "./Level3";
-import Level4 from "./Level4";
-import Level5 from "./Level5";
-import Level6 from "./Level6";
+import Level1 from "./OldLevels/Level1";
+import Level2 from "./OldLevels/Level2";
+import Level3 from "./OldLevels/Level3";
+import Level4 from "./OldLevels/Level4";
+import Level5 from "./OldLevels/Level5";
+import Level6 from "./OldLevels/Level6";
 
 import TestDungeon from "./TestDungeon";
 
@@ -132,6 +132,7 @@ export default class MainMenu extends Scene {
             this.levelSelectIsOpen = true;
         }
 
+        /*
         this.level1.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
@@ -166,7 +167,7 @@ export default class MainMenu extends Scene {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
             this.sceneManager.changeToScene(Level6, {}, sceneOptions);
-        }
+        }*/
 
         this.closeButton.onClick = () => {
             if (!(this.popUpIsOpen || this.levelSelectIsOpen)) return;

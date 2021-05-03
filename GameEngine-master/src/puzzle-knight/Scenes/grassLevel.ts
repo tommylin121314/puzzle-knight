@@ -88,8 +88,7 @@ export default class grassLevel extends GameLevel {
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
         this.dialogueList = [
-            ["Entering Ice Dungeon: Chamber One..."],
-            ["Watch out. The ice is slipper."]
+            ["Entering Grassy Plains..."],
         ];
 
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);

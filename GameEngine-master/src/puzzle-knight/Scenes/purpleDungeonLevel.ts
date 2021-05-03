@@ -10,24 +10,16 @@ import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
 import GameLevel from "./GameLevel";
 
-export default class Ice1 extends GameLevel {
+export default class grassLevel extends GameLevel {
 
-    private goblinPos = [new Vec2(4, 8)];
-    private skeletonPos = [new Vec2(2, 9), new Vec2(2, 7)];
-    private healthpotsPos = [new Vec2(14, 17)];
-    private signs = [new Vec2(14 * 32, 7 * 32)];
+    private goblinPos = [new Vec2(3, 8), new Vec2(5, 9), new Vec2(2, 14), new Vec2(12, 7), new Vec2(19, 3), new Vec2(8, 17), new Vec2(10, 19), new Vec2(20, 12), new Vec2(22, 19)];
+    private skeletonPos = [new Vec2(14, 3), new Vec2(2, 10), new Vec2(17, 7), new Vec2(23, 2), new Vec2(10, 13), new Vec2(7, 13), new Vec2(2, 22), new Vec2(2, 23), new Vec2(23, 15), new Vec2(23, 23), new Vec2(23, 6)];
+    private healthpotsPos = [new Vec2(9, 17),new Vec2(23, 6)];
+    private signs = [new Vec2(3 * 32, 22 * 32)];
 
     loadScene() {
         super.loadScene();
-        this.load.tilemap("level", "assets/tilemaps/Ice-1.json");
-
-        //LOADING AUDIO
-        this.load.audio("bow", "assets/sounds/arrow_sound.wav");
-        this.load.audio("melee", "assets/sounds/swish.wav");
-        this.load.audio("hit", "assets/sounds/impact.wav");
-        this.load.audio("dragon", "assets/sounds/dragon.wav");
-        this.load.audio("walk", "assets/sounds/walk3.wav");
-        
+        this.load.tilemap("level", "assets/tilemaps/purple_dungeon_level.json");
         
     }
 
@@ -38,13 +30,13 @@ export default class Ice1 extends GameLevel {
     startScene() {
         this.playerSpawn = new Vec2(3,3);
 
-        this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
-        this.doorPos = new Vec2(13 * 32, 12 * 32);
+        this.keyPos = [new Vec2(20, 13), new Vec2(23, 2)];
+        this.doorPos = new Vec2(12 * 32, 11 * 32);
 
         this.nextScene = BossRoom1;
 
         super.startScene();
-        this.mapType = 'ice';
+        this.mapType = 'castle';
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];

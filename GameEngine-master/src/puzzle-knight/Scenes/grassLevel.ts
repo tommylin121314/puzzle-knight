@@ -10,24 +10,16 @@ import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
 import GameLevel from "./GameLevel";
 
-export default class Ice1 extends GameLevel {
+export default class grassLevel extends GameLevel {
 
-    private goblinPos = [new Vec2(4, 8)];
-    private skeletonPos = [new Vec2(2, 9), new Vec2(2, 7)];
-    private healthpotsPos = [new Vec2(14, 17)];
-    private signs = [new Vec2(14 * 32, 7 * 32)];
+    private goblinPos = [new Vec2(2, 18), new Vec2(7, 18), new Vec2(15, 22), new Vec2(20, 22), new Vec2(2, 10), new Vec2(6, 11), new Vec2(9, 1), new Vec2(17, 1), new Vec2(18, 3)];
+    private skeletonPos = [new Vec2(1, 1), new Vec2(2, 1), new Vec2(15, 7), new Vec2(23, 1), new Vec2(12, 5), new Vec2(14, 18)];
+    private healthpotsPos = [new Vec2(11, 5),new Vec2(23, 23)];
+    private signs = [new Vec2(3 * 32, 22 * 32)];
 
     loadScene() {
         super.loadScene();
-        this.load.tilemap("level", "assets/tilemaps/Ice-1.json");
-
-        //LOADING AUDIO
-        this.load.audio("bow", "assets/sounds/arrow_sound.wav");
-        this.load.audio("melee", "assets/sounds/swish.wav");
-        this.load.audio("hit", "assets/sounds/impact.wav");
-        this.load.audio("dragon", "assets/sounds/dragon.wav");
-        this.load.audio("walk", "assets/sounds/walk3.wav");
-        
+        this.load.tilemap("level", "assets/tilemaps/grass_level.json");
         
     }
 
@@ -36,15 +28,15 @@ export default class Ice1 extends GameLevel {
     }
 
     startScene() {
-        this.playerSpawn = new Vec2(3,3);
+        this.playerSpawn = new Vec2(1,23);
 
-        this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
-        this.doorPos = new Vec2(13 * 32, 12 * 32);
+        this.keyPos = [new Vec2(1, 1), new Vec2(23, 8)];
+        this.doorPos = new Vec2(21 * 32, 2 * 32);
 
         this.nextScene = BossRoom1;
 
         super.startScene();
-        this.mapType = 'ice';
+        this.mapType = 'grass';
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];

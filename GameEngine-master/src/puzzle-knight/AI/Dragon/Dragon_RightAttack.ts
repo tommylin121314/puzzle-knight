@@ -1,6 +1,7 @@
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import DragonState from "./DragonState";
+import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
 
 export default class Dragon_RightAttack extends DragonState {
 

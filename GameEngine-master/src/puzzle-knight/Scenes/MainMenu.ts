@@ -43,6 +43,9 @@ export default class MainMenu extends Scene {
         this.load.image("logo", "assets/sprites/puzzle-knight-logo.png");
         this.load.image("controls", "assets/sprites/controls.png");
         this.load.image("about", "assets/sprites/about.png");
+
+        
+        
     }
 
     startScene() {

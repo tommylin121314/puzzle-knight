@@ -13,6 +13,8 @@ import GameLevel from "./GameLevel";
 
 export default class BossRoom1 extends GameLevel {
 
+    private dragonHp: number = 1000;
+
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/BossRoomMap.json");
@@ -52,6 +54,8 @@ export default class BossRoom1 extends GameLevel {
 
         let dragon = this.add.animatedSprite("dragon", "primary");
         dragon.position = new Vec2(8 * 32,8  * 32 - 64);
+        dragon.addPhysics(new AABB(Vec2.ZERO, new Vec2(12, 16)));
+        dragon.colliderOffset = new Vec2(0, -10);
         dragon.scale = new Vec2(1.7, 1.7);
         dragon.addAI(DragonController, {
             playerPos: this.player.position,

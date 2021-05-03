@@ -144,7 +144,7 @@ export default class MainMenu extends Scene {
         this.level3.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
         }
 
         this.level4.onClick = () => {

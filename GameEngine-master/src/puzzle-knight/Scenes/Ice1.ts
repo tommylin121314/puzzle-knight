@@ -28,7 +28,7 @@ export default class Ice1 extends GameLevel {
     }
 
     startScene() {
-        this.playerSpawn = new Vec2(13,13);
+        this.playerSpawn = new Vec2(3,3);
 
         this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
         this.doorPos = new Vec2(13 * 32, 12 * 32);

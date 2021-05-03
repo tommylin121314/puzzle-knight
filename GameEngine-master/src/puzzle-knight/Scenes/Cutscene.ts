@@ -16,8 +16,13 @@ export default class Cutscene extends Scene {
     protected textBox: Rect;
     protected text: Label;
     protected imageKeys: Array<string>;
-    protected images: Array<Sprite>;
+    protected background: Sprite;
     protected currSlide: number;
+    
+    protected dialogueOver: boolean = false;
+    protected endTime: number;
+
+    protected nextScene: new (...args: any) => Scene;
 
     loadScene() {
 
@@ -28,13 +33,13 @@ export default class Cutscene extends Scene {
     }
 
     updateScene(deltaT: number) {
-        if(Input.isKeyJustPressed("r")) {
-            let next = this.dialogue.getNextLine();
-            if(!next) {
-                console.log("DONE DIALOGUE");
-            }
-            else {
-                this.images[++this.currSlide].visible = true;
+        if(!this.dialogueOver) {
+            if(Input.isKeyJustPressed("r")) {
+                let next = this.dialogue.getNextLine();
+                if(!next) {
+                    this.dialogueOver = true;
+                    this.endTime = Date.now();
+                }
             }
         }
     }
@@ -69,14 +74,14 @@ export default class Cutscene extends Scene {
         this.dialogue.startDialogue();
     }
 
-    initSlides() {
-        this.imageKeys.forEach(image => {
-            let slide = this.add.sprite(image, "UI");
-            slide.visible = false;
-            this.images.push(slide);
-        });
-        this.images[0].visible = true;
-        this.currSlide = 0;
+    initBackground(key: string) {
+        let background = this.add.sprite(key, "UI");
+        background.position = this.viewport.getCenter();
+        return background;
+    }
+
+    goToNextScene() {
+        this.sceneManager.changeToScene(this.nextScene, {}, {});
     }
 
 }

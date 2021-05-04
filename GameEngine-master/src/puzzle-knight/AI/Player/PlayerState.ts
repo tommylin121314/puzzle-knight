@@ -13,6 +13,9 @@ export default abstract class PlayerState extends State {
     owner: GameNode;
     parent: PlayerController;
     collisionShape: AABB;
+    attackedTime: number;
+    bowReloadTime: number = 600;
+    meleeReloadTime: number = 250;
 
     onIce: boolean;
 
@@ -23,6 +26,7 @@ export default abstract class PlayerState extends State {
 
         this.onIce = false;
         this.collisionShape = (<AABB>this.owner.collisionShape).clone();
+        this.attackedTime = Date.now();
     }
 
     handleInput(event: GameEvent) {
@@ -38,10 +42,19 @@ export default abstract class PlayerState extends State {
         }
 
         if(!this.parent.static) {
-            if(Input.isMouseJustPressed()) {
-                this.finished("attack");
+            if(this.parent.usingBow) {
+                if(Date.now() - this.attackedTime > this.bowReloadTime) {
+                    if(Input.isMouseJustPressed()) {
+                        this.finished("attack");
+                        this.attackedTime = Date.now();
+                    }
+                }
             }
-
+            else {
+                if(Input.isMouseJustPressed()) {
+                    this.finished("attack");
+                }
+            }
             if(Input.isKeyJustPressed("q")) {
                 this.parent.usingBow = !this.parent.usingBow;
             }

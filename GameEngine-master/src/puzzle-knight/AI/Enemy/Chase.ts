@@ -11,14 +11,17 @@ export default class Chase extends EnemyState {
 
     attackRange: number;
     aggroRange: number;
+    speed: number;
 
     onEnter() {
         (<AnimatedSprite>this.owner).animation.play("WALK");
         if(this.parent.skeleton) {
-            this.attackRange = 120;
+            this.attackRange = 200;
+            this.speed = 30;
         }
         else if(this.parent.goblin) {
             this.attackRange = 20;
+            this.speed = 60;
         }
         this.aggroRange = 300;
     }
@@ -43,7 +46,7 @@ export default class Chase extends EnemyState {
             this.finished('patrol');
         }
 
-        this.owner.move(moveDir.normalized().scale(this.parent.speed * deltaT));
+        this.owner.move(moveDir.normalized().scale(this.speed * deltaT));
         (<AnimatedSprite>this.owner).animation.playIfNotAlready("WALK");
 
     }

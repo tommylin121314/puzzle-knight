@@ -51,6 +51,7 @@ export default class purpleDungeonLevel extends GameLevel {
 
         this.initPlayer();
         this.initViewport();
+        this.initDialogueUI();
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -90,6 +91,9 @@ export default class purpleDungeonLevel extends GameLevel {
         this.dialogueList = [
             ["This dungeon is pretty creepy...", "The dragon should live deeper underground."]
         ];
+
+
+        this.overlay.position = this.overlay.position.scale(0.5,0.5);
 
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
 

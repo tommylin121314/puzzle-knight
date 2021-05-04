@@ -82,7 +82,7 @@ export default class Attack extends EnemyState {
             this.emitter.fireEvent("SKELETON_ATTACK", {
                 direction: this.playerDir,
                 firePos: this.bow.position.clone(),
-                speed: 120,
+                speed: 200,
                 damage: this.skeletonDamage,
                 playerPos: this.parent.playerPos
             });

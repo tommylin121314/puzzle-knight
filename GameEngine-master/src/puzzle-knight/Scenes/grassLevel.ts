@@ -28,7 +28,7 @@ export default class grassLevel extends GameLevel {
     }
 
     startScene() {
-        this.playerSpawn = new Vec2(1,23);
+        this.playerSpawn = new Vec2(1,22);
 
         this.keyPos = [new Vec2(1, 1), new Vec2(23, 8)];
         this.doorPos = new Vec2(21 * 32, 2 * 32);
@@ -43,7 +43,6 @@ export default class grassLevel extends GameLevel {
         this.ground = <OrthogonalTilemap>tilemapsLayer[0].getItems()[0];
 
         let tilemapSize = this.walls.size;
-        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.healthpotsPos.forEach(pos => {
             this.addHealthPotion(pos);
@@ -51,6 +50,9 @@ export default class grassLevel extends GameLevel {
 
         this.initPlayer();
         this.initViewport();
+        this.initDialogueUI();
+
+        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -84,12 +86,22 @@ export default class grassLevel extends GameLevel {
         })
 
         this.addDoor();
+        this.numKeys = 2;
 
-        this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
-        this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
+        this.forced = [new Rect(new Vec2(1 * 32, 23 * 32), new Vec2(64, 64))];
+        this.optional = [new Rect(new Vec2(3 * 32, 22 * 32), new Vec2(40, 40))];
         this.dialogueList = [
             ["Entering Grassy Plains..."],
+            ["This plain is full of life.", "It'll be difficult to navigate with all these bushes..."]
         ];
+
+        this.overlay.position = this.overlay.position.scale(2,2);
+        this.text.position = this.overlay.position.clone().add(new Vec2(0, this.overlay.size.y / 3));
+        this.textBox.position = this.overlay.position.clone().add(new Vec2(0, this.overlay.size.y / 3));
+        console.log("VIEWPORT CENTER: " + this.viewport.getCenter().toString());
+        console.log("OVERLAY CENTER: " + this.overlay.position.toString());
+        console.log("VP SIZE: " + this.viewport.getHalfSize().toString());
+        console.log("OL SIZE: " + this.overlay.size.toString());
 
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
 

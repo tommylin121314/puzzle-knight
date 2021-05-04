@@ -90,6 +90,11 @@ export default class GameLevel extends Scene {
         this.load.image("door", "assets/sprites/Door.png");
 
         this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
+        this.load.audio("bow", "assets/sounds/arrow_sound.wav");
+        this.load.audio("melee", "assets/sounds/swish.wav");
+        this.load.audio("hit", "assets/sounds/impact.wav");
+        this.load.audio("dragon", "assets/sounds/dragon.wav");
+        this.load.audio("walk", "assets/sounds/walk3.wav");
     }
 
     startScene(): void {
@@ -100,7 +105,6 @@ export default class GameLevel extends Scene {
         this.enemies = [];
         this.healthpots = [];
         this.keys = [];
-        this.initDialogueUI();
         this.endLevelTime = Date.now();
         this.numKeys = 2;
         this.hasDoor = true;
@@ -118,8 +122,8 @@ export default class GameLevel extends Scene {
     }
 
     initViewport() {
-        this.viewport.follow(this.player);
         this.viewport.setZoomLevel(2);
+        this.viewport.follow(this.player);
     }
 
     subscribeToEvents() {
@@ -135,8 +139,8 @@ export default class GameLevel extends Scene {
 
     initDialogueUI() {
         this.overlay = <Rect>this.add.graphic(GraphicType.RECT, "UIBackground", {
-            position: new Vec2(this.viewport.getCenter().x / 2, this.viewport.getCenter().y / 2),
-            size: new Vec2(this.viewport.getHalfSize().x, this.viewport.getHalfSize().y)
+            position: new Vec2(this.viewport.getCenter().x, this.viewport.getCenter().y),
+            size: new Vec2(this.viewport.getHalfSize().x * 2, this.viewport.getHalfSize().y * 2)
         })
         this.overlay.color = new Color(0, 0, 0, 0.5);
         this.overlay.visible = false;
@@ -211,7 +215,7 @@ export default class GameLevel extends Scene {
                 case "PLAYER_MELEE_ATTACK":
                     {
                         let pos = event.data.get("pos")
-                        let hitbox = new AABB(pos, new Vec2(15, 15));
+                        let hitbox = new AABB(pos, new Vec2(20, 20));
                         for(let i = 0; i < this.enemies.length; i++) {
                             if(this.enemies[i].collisionShape !== null){ 
                                 if(hitbox.containsPoint(this.enemies[i].position)){
@@ -236,7 +240,7 @@ export default class GameLevel extends Scene {
                             {
                                 direction: direction,
                                 speed: speed,
-                                damage: 30,
+                                damage: 15,
                                 enemy: false,
                                 lifespan: 1000,
                                 enemies: this.enemies
@@ -491,7 +495,7 @@ export default class GameLevel extends Scene {
         this.player.setGroup("player");
         this.player.addAI(PlayerController,
             {
-                speed: 75,
+                speed: 90,
                 attackLayer: this.getLayer("attacks"),
                 emitter: new Emitter(),
                 receiver: new Receiver(),

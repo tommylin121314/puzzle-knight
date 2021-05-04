@@ -10,6 +10,7 @@ import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
 import EnterBossCS from "./EnterBossCS";
 import GameLevel from "./GameLevel";
+import DragonEntrance from './DragonEntrance';
 
 export default class Ice1 extends GameLevel {
 
@@ -42,7 +43,7 @@ export default class Ice1 extends GameLevel {
         this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
         this.doorPos = new Vec2(13 * 32, 12 * 32);
 
-        this.nextScene = EnterBossCS;
+        this.nextScene = DragonEntrance;
 
         super.startScene();
         this.mapType = 'ice';
@@ -52,7 +53,6 @@ export default class Ice1 extends GameLevel {
         this.ground = <OrthogonalTilemap>tilemapsLayer[0].getItems()[0];
 
         let tilemapSize = this.walls.size;
-        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.healthpotsPos.forEach(pos => {
             this.addHealthPotion(pos);
@@ -60,6 +60,9 @@ export default class Ice1 extends GameLevel {
 
         this.initPlayer();
         this.initViewport();
+        this.initDialogueUI();
+
+        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -92,15 +95,18 @@ export default class Ice1 extends GameLevel {
             this.addKeys(pos);
         })
 
+        this.numKeys = 2;
+
         this.addDoor();
+
+        this.overlay.position = new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/2)
 
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
         this.dialogueList = [
             ["Entering Ice Dungeon: Chamber One..."],
-            ["Watch out. The ice is slipper."]
+            ["Watch out", "The ice is slipper."]
         ];
-
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
 
     }

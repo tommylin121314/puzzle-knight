@@ -12,10 +12,12 @@ import DragonController from "../AI/Dragon/DragonController";
 import ProjectileController from "../AI/Other/ProjectileController";
 import Dialogue from "../GameSystem/Dialogue";
 import GameLevel from "./GameLevel";
+import MidFightCS from './MidFightCS';
 
 export default class BossRoom1 extends GameLevel {
 
     private dragonHp: number = 1000;
+    private levelStartTime: number;
 
     loadScene() {
         super.loadScene();
@@ -38,6 +40,7 @@ export default class BossRoom1 extends GameLevel {
     }
 
     startScene() {
+        this.levelStartTime = Date.now();
         this.playerSpawn = new Vec2(12,12);
         this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: "soundtrack", loop: true, volume: 0.3})
 
@@ -94,6 +97,9 @@ export default class BossRoom1 extends GameLevel {
         //     }
         // }
 
+        if(Date.now() - this.levelStartTime > 15000) {
+            this.sceneManager.changeToScene(MidFightCS, {}, {});
+        }
 
     }
 

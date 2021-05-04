@@ -75,9 +75,13 @@ export default class Cutscene extends Scene {
     }
 
     initBackground(key: string) {
-        let background = this.add.sprite(key, "UI");
-        background.position = this.viewport.getCenter();
-        return background;
+        if(key != '') {
+            let background = this.add.sprite(key, "UI");
+            background.position = this.viewport.getCenter();
+            return background;
+        }
+        else 
+            return;
     }
 
     goToNextScene() {

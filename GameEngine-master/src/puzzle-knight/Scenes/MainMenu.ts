@@ -10,14 +10,17 @@ import Scene from "../../Wolfie2D/Scene/Scene"
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import BossRoom1 from "./BossRoom1";
+import DragonEntrance from "./DragonEntrance";
 import EnterBossCS from "./EnterBossCS";
 import Ice1 from "./Ice1";
+import IntroCS from "./IntroCS";
 import Level1 from "./OldLevels/Level1";
 import Level2 from "./OldLevels/Level2";
 import Level3 from "./OldLevels/Level3";
 import Level4 from "./OldLevels/Level4";
 import Level5 from "./OldLevels/Level5";
 import Level6 from "./OldLevels/Level6";
+import purpleDungeonLevel from "./purpleDungeonLevel";
 
 import TestDungeon from "./TestDungeon";
 
@@ -80,7 +83,7 @@ export default class MainMenu extends Scene {
         this.playButton.onClick = () => {
             if (this.popUpIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(Ice1, {}, sceneOptions);
+            this.sceneManager.changeToScene(IntroCS, {}, sceneOptions);
         }
 
         this.aboutButton.onClick = () => {
@@ -132,25 +135,26 @@ export default class MainMenu extends Scene {
             this.levelSelectIsOpen = true;
         }
 
-        /*
+        
         this.level1.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            this.sceneManager.changeToScene(DragonEntrance, {}, sceneOptions);
         }
 
         this.level2.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+            this.sceneManager.changeToScene(Ice1, {}, sceneOptions);
         }
 
         this.level3.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
+            this.sceneManager.changeToScene(purpleDungeonLevel, {}, sceneOptions);
         }
 
+        /*
         this.level4.onClick = () => {
             if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}

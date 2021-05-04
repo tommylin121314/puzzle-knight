@@ -16,6 +16,7 @@ export default class Player_Death extends PlayerState {
         this.owner.setAIActive(false, {});
         (<AnimatedSprite>this.owner).visible = false;
         this.owner.isCollidable = false;
+        this.emitter.fireEvent("PLAYER_DIED");
         return {};
     }
 

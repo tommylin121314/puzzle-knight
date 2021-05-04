@@ -26,12 +26,15 @@ export default class IntroCS extends Cutscene {
             ".......",
             "After the knight defeated the Orc Lord and rescued the princess,",
             "the knight and the maiden promptly fell in love.",
-            "Upon returning, knight asked King Annek",
+            "Upon returning, the knight asked King Annek",
             "for his daughter's hand in marriage.",
-            "A peasant marrying my daughter?",
+            "'A peasant marrying my daughter?'",
             "Shocked as he was, the king gave them his blessings...",
             "And they lived happily ever after...",
-            "......."
+            ".......",
+            ".............",
+            "A week before the wedding, the king announced that the princess",
+            "had gotten kidnapped again and send the knight to find her..."
         ];
         this.initLayers();
         this.initViewport();

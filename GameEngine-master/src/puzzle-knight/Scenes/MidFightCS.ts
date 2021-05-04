@@ -1,6 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import BossRoom1 from "./BossRoom1";
 import Cutscene from "./Cutscene";
+import MainMenu from "./MainMenu";
 
 export default class MidFightCS extends Cutscene {
 
@@ -18,7 +19,7 @@ export default class MidFightCS extends Cutscene {
     startScene() {
         this.startTime = Date.now();
         this.started = false;
-        this.nextScene = BossRoom1;
+        this.nextScene = MainMenu;
 
         this.sentences = [
             "KNIGHT: Why can't I hit him? How is he so strong...",
@@ -26,7 +27,10 @@ export default class MidFightCS extends Cutscene {
             "DRAGON: dimension in terms of strength. Literally.",
             "KNIGHT: That doesn't make any sens-",
             "DRAGON: So are you willing to listen now..",
-            "DRAGON: ..or should we keep going at it?"
+            "DRAGON: ..or should we keep going at it?",
+            "The dragon tells the knight everything the king had planned...",
+            "After hearing about the king's plot to kill him because he didn't approve",
+            "Of the marriage, the knight stormed back to the kingdom and killed the king.",
         ];
         this.initLayers();
         this.initViewport();

@@ -32,7 +32,7 @@ export default class GameLevel extends Scene {
     private deathAnimationLength: number = 1000;
 
     // healthbar and exp bar
-    protected healthPoints: number = 100;
+    protected healthPoints: number = 500;
     protected experiencePoints: number = 0;
     protected hpbar: Sprite;
     protected hpbarBorder: Sprite;
@@ -135,6 +135,7 @@ export default class GameLevel extends Scene {
         this.receiver.subscribe("ENEMY_HIT");
         this.receiver.subscribe("HEALTH_POT");
         this.receiver.subscribe("PLAYER_ENTERED_LEVEL_END");
+        this.receiver.subscribe("PLAYER_DIED");
     }
 
     initDialogueUI() {
@@ -383,6 +384,11 @@ export default class GameLevel extends Scene {
                     (<PlayerController>this.player.ai).changeState("hurt");
                     break;
                 }
+
+                case "PLAYER_DIED": {
+                    this.sceneManager.changeToScene(MainMenu, {}, {});
+                    break;
+                }
             }
         }
 
@@ -456,7 +462,7 @@ export default class GameLevel extends Scene {
         if(Input.isKeyJustPressed("e")) {
             this.keys.forEach(key => {
                 if(key != null)
-                    if(this.player.position.clone().distanceTo(key.position) < 10) {
+                    if(this.player.position.clone().distanceTo(key.position) < 25) {
                         key.destroy();
                         key = null;
                         this.keysCollected++;
@@ -466,7 +472,7 @@ export default class GameLevel extends Scene {
 
         if(this.hasDoor) {
         //check if players at the door
-            if(new Rect(this.door.position.clone(), new Vec2(10, 10)).contains(this.player.position.clone().x, this.player.position.clone().y)) {
+            if(new Rect(this.door.position.clone(), new Vec2(20, 20)).contains(this.player.position.clone().x, this.player.position.clone().y)) {
                 if(Date.now() - this.endLevelTime > 5000) {
                     this.endLevelTime = Date.now();
                     this.emitter.fireEvent("PLAYER_ENTERED_LEVEL_END");
@@ -495,7 +501,7 @@ export default class GameLevel extends Scene {
         this.player.setGroup("player");
         this.player.addAI(PlayerController,
             {
-                speed: 90,
+                speed: 290,
                 attackLayer: this.getLayer("attacks"),
                 emitter: new Emitter(),
                 receiver: new Receiver(),

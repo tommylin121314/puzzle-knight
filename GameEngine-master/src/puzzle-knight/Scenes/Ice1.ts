@@ -104,7 +104,7 @@ export default class Ice1 extends GameLevel {
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
         this.dialogueList = [
-            ["Entering Ice Dungeon: Chamber One..."],
+            ["Entering Ice Dungeon...", "The dragon must be close!", "It absorbed all the heat from this area."],
             ["Watch out", "The ice is slipper."]
         ];
         // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);

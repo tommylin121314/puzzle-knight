@@ -9,6 +9,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Dialogue from "../GameSystem/Dialogue";
 import BossRoom1 from "./BossRoom1";
 import GameLevel from "./GameLevel";
+import Ice1 from "./Ice1";
 
 export default class purpleDungeonLevel extends GameLevel {
 
@@ -33,7 +34,7 @@ export default class purpleDungeonLevel extends GameLevel {
         this.keyPos = [new Vec2(20, 13), new Vec2(23, 2)];
         this.doorPos = new Vec2(12 * 32, 11 * 32);
 
-        this.nextScene = BossRoom1;
+        this.nextScene = Ice1;
 
         super.startScene();
         this.mapType = 'castle';
@@ -89,7 +90,7 @@ export default class purpleDungeonLevel extends GameLevel {
         this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
         this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
         this.dialogueList = [
-            ["This dungeon is pretty creepy...", "The dragon should live deeper underground."]
+            ["This dungeon is pretty creepy...", "I hear a lot of monsters nearby", "The dragon should live deeper underground."]
         ];
 
 

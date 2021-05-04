@@ -21,7 +21,6 @@ export default class grassLevel extends GameLevel {
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/grass_level.json");
-        this.load.image("grass", "assets/sprites/grass.png");
     }
 
     unloadScene() {

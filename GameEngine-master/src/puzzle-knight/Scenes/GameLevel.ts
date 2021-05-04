@@ -392,6 +392,27 @@ export default class GameLevel extends Scene {
             }
         }
 
+
+        //////CHEAT CODES////////
+        if(Input.isKeyJustPressed('k')) {
+            this.keysCollected = 999;
+        }
+        if(Input.isKeyJustPressed('l')) {
+            if((<PlayerController>this.player.ai).speed === 250)
+                (<PlayerController>this.player.ai).speed = 90;
+            else
+            (<PlayerController>this.player.ai).speed = 250;
+        }
+        if(Input.isKeyJustPressed('p')) {
+            this.healthPoints = 99999999;
+        }
+        if(Input.isKeyJustPressed('o')) {
+            this.healthPoints = 100;
+        }
+
+        /////////////////////////
+
+
         // handle player death
 
         //update hp and xp
@@ -501,7 +522,7 @@ export default class GameLevel extends Scene {
         this.player.setGroup("player");
         this.player.addAI(PlayerController,
             {
-                speed: 290,
+                speed: 90,
                 attackLayer: this.getLayer("attacks"),
                 emitter: new Emitter(),
                 receiver: new Receiver(),

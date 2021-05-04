@@ -98,6 +98,7 @@ export default class GameLevel extends Scene {
     }
 
     startScene(): void {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key:'soundtrack'});
         this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: 'soundtrack', loop: true});
         this.initLayers();
         this.subscribeToEvents();
@@ -270,7 +271,7 @@ export default class GameLevel extends Scene {
                 case "PLAYER_ENTERED_LEVEL_END":
                     {
                         if(this.hasDoor) {
-                            if(this.keysCollected != this.numKeys) {
+                            if(this.keysCollected < this.numKeys) {
                                 this.dialogue = new Dialogue(["Door is locked.", "Find all the keys"], this, this.textBox, this.text, this.overlay, false);
                                 this.dialogue.startDialogue();
                             }
@@ -402,9 +403,6 @@ export default class GameLevel extends Scene {
                 (<PlayerController>this.player.ai).speed = 90;
             else
             (<PlayerController>this.player.ai).speed = 250;
-        }
-        if(Input.isKeyJustPressed('p')) {
-            this.healthPoints = 99999999;
         }
         if(Input.isKeyJustPressed('o')) {
             this.healthPoints = 100;

@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Input from "../../Wolfie2D/Input/Input";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
@@ -25,11 +26,13 @@ export default class Cutscene extends Scene {
     protected nextScene: new (...args: any) => Scene;
 
     loadScene() {
-
+        this.load.audio('music', "assets/sounds/DungeonSoundtrack.wav");
     }
 
-    startScene() {
+    unloadScene() {     }
 
+    startScene() {
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key:"music", loop:true});
     }
 
     updateScene(deltaT: number) {

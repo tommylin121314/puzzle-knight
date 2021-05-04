@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import GameNode, {TweenableProperties} from "../../Wolfie2D/Nodes/GameNode";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import UIElement from "../../Wolfie2D/Nodes/UIElement";
@@ -23,6 +24,8 @@ import TestDungeon from "./TestDungeon";
 export default class MainMenu extends Scene {
     private mainMenu: Layer;
     private levels: Layer;
+    private controls: Layer;
+    private aboutL: Layer;
     private about: Sprite;
     private popUpIsOpen: Boolean;
     private levelSelectIsOpen: Boolean;
@@ -48,12 +51,13 @@ export default class MainMenu extends Scene {
         this.load.image("logo", "assets/sprites/puzzle-knight-logo.png");
         this.load.image("controls", "assets/sprites/controls.png");
         this.load.image("about", "assets/sprites/about.png");
-
+        this.load.audio("music", "assets/sounds/BossSoundtrack.wav")
         
         
     }
 
     startScene() {
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key:"music", loop:true});
         //gets center of viewport
         this.viewport.setCenter(600,400);
         const center = this.viewport.getCenter().clone();
@@ -67,9 +71,13 @@ export default class MainMenu extends Scene {
         //////****** MAIN MENU *******///////
         this.mainMenu = this.addUILayer("mainMenu");
         this.levels = this.addUILayer("levels");
+        this.controls = this.addUILayer("controls");
+        this.aboutL = this.addUILayer("aboutL");
 
         this.mainMenu.setHidden(false);
         this.levels.setHidden(true);
+        this.controls.setHidden(true);
+        this.aboutL.setHidden(true);
 
         //game logo
         const logo = this.add.sprite("logo", "mainMenu");
@@ -93,25 +101,17 @@ export default class MainMenu extends Scene {
         }
 
         this.aboutButton.onClick = () => {
-            if (this.popUpIsOpen) return;
-            this.popUpIsOpen = true;
-            const center = this.viewport.getCenter();
-            this.about.alpha = 1;
-            this.closeButton.borderColor = Color.WHITE;
-            this.closeButton.backgroundColor = Color.BLACK;
-            this.closeButton.textColor = Color.WHITE;
-            this.closeButton.alpha = 1;
+            this.mainMenu.setHidden(true);
+            this.levels.setHidden(true);
+            this.controls.setHidden(true);
+            this.aboutL.setHidden(false);
         }
 
         this.controlsButton.onClick = () => {
-            if (this.popUpIsOpen) return;
-            this.popUpIsOpen = true;
-            const center = this.viewport.getCenter();
-            this.control.alpha = 1;
-            this.closeButton.borderColor = Color.WHITE;
-            this.closeButton.backgroundColor = Color.BLACK;
-            this.closeButton.textColor = Color.WHITE;
-            this.closeButton.alpha = 1;
+            this.mainMenu.setHidden(true);
+            this.levels.setHidden(true);
+            this.controls.setHidden(false);
+            this.aboutL.setHidden(true);
         }
 
         this.levelSelect.onClick = () => {
@@ -143,6 +143,8 @@ export default class MainMenu extends Scene {
             */
             this.mainMenu.setHidden(true);
             this.levels.setHidden(false);
+            this.controls.setHidden(true);
+            this.aboutL.setHidden(true);
         }
 
         
@@ -229,6 +231,8 @@ export default class MainMenu extends Scene {
             */
             this.mainMenu.setHidden(false);
             this.levels.setHidden(true);
+            this.controls.setHidden(true);
+            this.aboutL.setHidden(true);
         }
     }
 
@@ -260,17 +264,11 @@ export default class MainMenu extends Scene {
         this.controlsButton.onClickEventId = "controls";
 
         //close popup button
-        this.closeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y+300), text: "Close"});
-        this.closeButton.borderWidth = 3;
-        this.closeButton.borderColor = new Color(0,0,0,0);
-        this.closeButton.backgroundColor = new Color(0,0,0,0);
-        this.closeButton.textColor = new Color(0,0,0,0);
-        this.closeButton.alpha = 0;
+        this.closeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "aboutL", {position: new Vec2(center.x, center.y+300), text: "Close"});
 
         //////****** ABOUT *******/////// make this a sprite
-        this.about = this.add.sprite("about", "mainMenu");
+        this.about = this.add.sprite("about", "aboutL");
         this.about.position = new Vec2(center.x, center.y);
-        this.about.alpha = 0;
 
         //////****** CONTROLS *******///////
         this.control = this.add.sprite("controls", "mainMenu");
@@ -292,10 +290,31 @@ export default class MainMenu extends Scene {
         this.level6 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+150), text: "VI.Enter Den Cutscene"});
         this.level7 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y), text: "VII.Dragon Battle"});
         this.level8 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y+75), text: "VIII.After Fight"});
-        let close = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+200), text: "Close"});
+        let close = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+300), text: "Close"});
         close.onClick =() => {
             this.mainMenu.setHidden(false);
             this.levels.setHidden(true);
+            this.controls.setHidden(true);
+            this.aboutL.setHidden(true);
+        }
+
+        let controlsHeader = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y - 250), text:'CONTROLS'});
+        let move = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y - 150), text:'move: W,A,S,D'});
+        let attack = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y -75), text:'Mouse Click'});
+        let pickup = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y), text:'Pick up: E'});
+        let talk = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y + 75), text:'Talk/Interact: R'});
+        let switchWeapon = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y + 150), text:'Switch Weapon: Q'});
+        let cheats = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 200), text:'CHEATS'});
+        let keys = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 150), text:'Give player all keys on level'});
+        let speed = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 75), text:'Toggle super speed'});
+        let heal = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y), text:'Fully heals player'});
+        let closeControls = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y+300), text: "Close"});
+
+        closeControls.onClick = () => {
+            this.mainMenu.setHidden(false);
+            this.levels.setHidden(true);
+            this.controls.setHidden(true);
+            this.aboutL.setHidden(true);
         }
     }
 

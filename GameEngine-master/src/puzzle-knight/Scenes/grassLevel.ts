@@ -1,6 +1,7 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import EventQueue from "../../Wolfie2D/Events/EventQueue";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Input from "../../Wolfie2D/Input/Input";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
@@ -21,6 +22,7 @@ export default class grassLevel extends GameLevel {
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/grass_level.json");
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
     }
 
     unloadScene() {

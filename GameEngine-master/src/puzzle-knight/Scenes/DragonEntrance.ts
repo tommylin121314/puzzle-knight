@@ -49,6 +49,7 @@ export default class DragonEntrance extends GameLevel {
         let tilemapSize = this.walls.size;
 
         this.initPlayer();
+        this.viewport.setCenter(300, 200);
         this.initViewport();
         this.initDialogueUI();
 

@@ -1,6 +1,7 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import EventQueue from "../../Wolfie2D/Events/EventQueue";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Input from "../../Wolfie2D/Input/Input";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
@@ -21,6 +22,7 @@ export default class purpleDungeonLevel extends GameLevel {
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/purple_dungeon_level.json");
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
         
     }
 
@@ -29,6 +31,7 @@ export default class purpleDungeonLevel extends GameLevel {
     }
 
     startScene() {
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: 'soundtrack', loop: true});
         this.playerSpawn = new Vec2(3,3);
 
         this.keyPos = [new Vec2(20, 13), new Vec2(23, 2)];
@@ -51,6 +54,7 @@ export default class purpleDungeonLevel extends GameLevel {
         });
 
         this.initPlayer();
+        this.viewport.setCenter(600,400);
         this.initViewport();
         this.initDialogueUI();
 

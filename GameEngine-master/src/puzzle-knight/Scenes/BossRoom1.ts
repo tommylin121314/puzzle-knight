@@ -42,7 +42,7 @@ export default class BossRoom1 extends GameLevel {
     startScene() {
         this.levelStartTime = Date.now();
         this.playerSpawn = new Vec2(12,12);
-        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: "soundtrack", loop: true, volume: 0.3})
+        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: "soundtrack", loop: true, volume: 1})
 
         super.startScene();
         this.hasDoor = false;

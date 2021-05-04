@@ -51,7 +51,7 @@ export default class MainMenu extends Scene {
         this.load.image("logo", "assets/sprites/puzzle-knight-logo.png");
         this.load.image("controls", "assets/sprites/controls.png");
         this.load.image("about", "assets/sprites/about.png");
-        this.load.audio("music", "assets/sounds/BossSoundtrack.wav")
+        this.load.audio("music", "assets/sounds/DungeonSoundtrack.wav")
         
         
     }
@@ -308,6 +308,7 @@ export default class MainMenu extends Scene {
         let keys = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 150), text:'Give player all keys on level'});
         let speed = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 75), text:'Toggle super speed'});
         let heal = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y), text:'Fully heals player'});
+        let mm = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y+75), text:'Return to Main Menu'});
         let closeControls = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y+300), text: "Close"});
 
         closeControls.onClick = () => {

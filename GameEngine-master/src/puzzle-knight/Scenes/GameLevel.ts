@@ -88,8 +88,6 @@ export default class GameLevel extends Scene {
         this.load.image("sign", "assets/sprites/Sign-Ground.png");
         this.load.spritesheet("key", "assets/spritesheets/Key.json");
         this.load.image("door", "assets/sprites/Door.png");
-
-        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
         this.load.audio("bow", "assets/sounds/arrow_sound.wav");
         this.load.audio("melee", "assets/sounds/swish.wav");
         this.load.audio("hit", "assets/sounds/impact.wav");
@@ -98,8 +96,6 @@ export default class GameLevel extends Scene {
     }
 
     startScene(): void {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key:'soundtrack'});
-        this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key: 'soundtrack', loop: true});
         this.initLayers();
         this.subscribeToEvents();
         this.addUI();
@@ -492,7 +488,7 @@ export default class GameLevel extends Scene {
         if(this.hasDoor) {
         //check if players at the door
             if(new Rect(this.door.position.clone(), new Vec2(20, 20)).contains(this.player.position.clone().x, this.player.position.clone().y)) {
-                if(Date.now() - this.endLevelTime > 5000) {
+                if(Date.now() - this.endLevelTime > 3000) {
                     this.endLevelTime = Date.now();
                     this.emitter.fireEvent("PLAYER_ENTERED_LEVEL_END");
                 }

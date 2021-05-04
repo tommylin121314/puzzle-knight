@@ -11,6 +11,7 @@ import BossRoom1 from "./BossRoom1";
 import EnterBossCS from "./EnterBossCS";
 import GameLevel from "./GameLevel";
 import DragonEntrance from './DragonEntrance';
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class Ice1 extends GameLevel {
 
@@ -29,7 +30,7 @@ export default class Ice1 extends GameLevel {
         this.load.audio("hit", "assets/sounds/impact.wav");
         this.load.audio("dragon", "assets/sounds/dragon.wav");
         this.load.audio("walk", "assets/sounds/walk3.wav");
-        
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
         
     }
 
@@ -59,6 +60,7 @@ export default class Ice1 extends GameLevel {
         });
 
         this.initPlayer();
+        this.viewport.setCenter(600,400);
         this.initViewport();
         this.initDialogueUI();
 

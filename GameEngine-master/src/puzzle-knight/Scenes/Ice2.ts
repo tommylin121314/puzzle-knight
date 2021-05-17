@@ -96,7 +96,7 @@ export default class Ice2 extends GameLevel {
         this.optional = [];
         this.dialogueList = [
             ["Entering Ice Dungeon: Chamber Two..."],
-            ["Break all the ice by walking on it. Tread carefully."]
+            ["You MUST break all the ice by walking on it. Tread carefully."]
         ];
         (<PlayerController>this.player.ai).walls.setTileAtRowCol(new Vec2(30, 39), 6);
     }

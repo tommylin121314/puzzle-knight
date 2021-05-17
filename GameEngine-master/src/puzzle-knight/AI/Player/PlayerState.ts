@@ -7,6 +7,7 @@ import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../../Wolfie2D/Input/Input";
 import AABB from "../../../Wolfie2D/DataTypes/Shapes/AABB";
+import Timer from "../../../Wolfie2D/Timing/Timer";
 
 export default abstract class PlayerState extends State {
 
@@ -18,6 +19,7 @@ export default abstract class PlayerState extends State {
     meleeReloadTime: number = 250;
 
     onIce: boolean;
+    prevTilePos: Vec2;
 
 
     constructor(owner: GameNode, parent: StateMachine) {
@@ -27,6 +29,7 @@ export default abstract class PlayerState extends State {
         this.onIce = false;
         this.collisionShape = (<AABB>this.owner.collisionShape).clone();
         this.attackedTime = Date.now();
+        this.prevTilePos = this.parent.ground.getColRowAt(this.owner.position.clone().add(new Vec2(0, 16)));
     }
 
     handleInput(event: GameEvent) {
@@ -67,6 +70,11 @@ export default abstract class PlayerState extends State {
         //SLIDING HANDLING
         if(this.parent.scene.mapType === 'ice') {
             this.onIce = this.checkOnIce();
+            if (this.checkIfInVoid()) {
+                (<PlayerController>this.owner.ai).changeState("death");
+            }
+            this.breakIce();
+            this.setPrevTile();
         }
 
     }
@@ -75,6 +83,43 @@ export default abstract class PlayerState extends State {
         let tilePos = this.parent.ground.getColRowAt(this.owner.position.clone().add(new Vec2(0, 16)));
         let tile = this.parent.ground.getTileAtRowCol(tilePos);
         if(tile === 17) {
+            return true;
+        }
+        return false;
+    }
+
+    setPrevTile() {
+        this.prevTilePos = this.parent.ground.getColRowAt(this.owner.position.clone().add(new Vec2(0, 16)));
+    }
+
+    breakIce(): void {
+        let prevTile = null;
+        let tilePos = this.parent.ground.getColRowAt(this.owner.position.clone().add(new Vec2(0, 16)));
+        // check if player moved from breaking ice tile
+        // console.log(!(this.prevTilePos.x/32 == tilePos.x/32 && this.prevTilePos.y/32 == tilePos.y/32));
+        if (!(this.prevTilePos.x/32 == tilePos.x/32 && this.prevTilePos.y/32 == tilePos.y/32)) {
+            prevTile = this.parent.ground.getTileAtRowCol(this.prevTilePos);
+            // console.log(prevTile);
+
+            if (prevTile === 19) {
+                this.parent.ground.setTileAtRowCol(this.prevTilePos, 20);
+                let prevTilePosCopy = this.prevTilePos
+                let iceTimer = new Timer(100, () => {
+                    // console.log("timer running");
+                    this.parent.ground.setTileAtRowCol(prevTilePosCopy, 14);
+                })
+                iceTimer.start();
+                // console.log("moved from ice tile");
+            }
+        }
+        return;
+    }
+
+    checkIfInVoid(): boolean {
+        let tilePos = this.parent.ground.getColRowAt(this.owner.position.clone().add(new Vec2(0, 16)));
+        let tile = this.parent.ground.getTileAtRowCol(tilePos);
+        if(tile === 14) {
+            // console.log("in the void rip");
             return true;
         }
         return false;

@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import BossRoom1 from "./BossRoom1";
 import Cutscene from "./Cutscene";
 import MainMenu from "./MainMenu";
@@ -13,6 +14,7 @@ export default class MidFightCS extends Cutscene {
     }
 
     unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
 
     }
 

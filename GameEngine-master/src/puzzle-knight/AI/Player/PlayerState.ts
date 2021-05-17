@@ -70,6 +70,9 @@ export default abstract class PlayerState extends State {
         //SLIDING HANDLING
         if(this.parent.scene.mapType === 'ice') {
             this.onIce = this.checkOnIce();
+        }
+
+        if(this.parent.scene.mapType === 'ice2') {
             if (this.checkIfInVoid()) {
                 (<PlayerController>this.owner.ai).changeState("death");
             }

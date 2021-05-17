@@ -40,7 +40,7 @@ export default class Ice2 extends GameLevel {
         this.nextScene = DragonEntrance;
 
         super.startScene();
-        this.mapType = 'ice';
+        this.mapType = 'ice2';
 
         let tilemapsLayer = this.add.tilemap("level");
         this.walls = <OrthogonalTilemap>tilemapsLayer[1].getItems()[0];

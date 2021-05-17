@@ -65,11 +65,14 @@ export default class Player_Attack extends PlayerState {
             let dir = this.owner.position.dirTo(Input.getGlobalMousePosition());
 
             let hitboxPox = new Vec2(this.owner.position.x + dir.x*15, this.owner.position.y + dir.y*15);
+            
+            
             this.emitter.fireEvent("PLAYER_MELEE_ATTACK", {
                 pos: hitboxPox.clone(),
                 damage: this.parent.meleeDamage
+                
             });
-
+            
             
             if(!(<AnimatedSprite>this.owner).animation.isPlaying("MELEE_ATTACK")) {
                 this.finished("idle");

@@ -24,6 +24,7 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 export default class GameLevel extends Scene {
+    static playerArrowDamage = 15;
     // Every level will have a player, which will be an animated sprite
     protected playerSpawn: Vec2;
     protected player: AnimatedSprite;
@@ -161,6 +162,9 @@ export default class GameLevel extends Scene {
     }
 
     updateScene(deltaT: number): void {
+        if (PlayerController.level != null) {
+            GameLevel.playerArrowDamage = 15 + (PlayerController.level * 2);
+        }
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
             if(!this.isTalking)
@@ -238,7 +242,7 @@ export default class GameLevel extends Scene {
                             {
                                 direction: direction,
                                 speed: speed,
-                                damage: 15,
+                                damage: GameLevel.playerArrowDamage,
                                 enemy: false,
                                 lifespan: 1000,
                                 enemies: this.enemies
@@ -408,8 +412,11 @@ export default class GameLevel extends Scene {
 
 
         // handle player death
-
+        
         //update hp and xp
+        this.experiencePoints = PlayerController.xp/PlayerController.level;
+        this.experiencePoints *= 100;
+
         if(this.healthPoints < 0) { 
             this.healthPoints = 0;
         }

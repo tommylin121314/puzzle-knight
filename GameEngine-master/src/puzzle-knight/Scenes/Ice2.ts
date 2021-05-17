@@ -1,29 +1,20 @@
-import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import EventQueue from "../../Wolfie2D/Events/EventQueue";
-import Input from "../../Wolfie2D/Input/Input";
-import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
-import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
-import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
-import Label from "../../Wolfie2D/Nodes/UIElements/Label";
-import Dialogue from "../GameSystem/Dialogue";
-import BossRoom1 from "./BossRoom1";
-import EnterBossCS from "./EnterBossCS";
 import GameLevel from "./GameLevel";
-import DragonEntrance from './DragonEntrance';
+import BossRoom1 from "./BossRoom1";
+import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
+import DragonEntrance from "./DragonEntrance";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import Ice2 from "./Ice2";
 
-export default class Ice1 extends GameLevel {
-
-    private goblinPos = [new Vec2(4, 8)];
-    private skeletonPos = [new Vec2(2, 9), new Vec2(2, 7)];
-    private healthpotsPos = [new Vec2(14, 17)];
-    private signs = [new Vec2(14 * 32, 7 * 32)];
-
+export default class Ice2 extends GameLevel {
+    private goblinPos = [new Vec2(13, 22), new Vec2(11, 21), new Vec2(5, 10), new Vec2(6, 8), new Vec2(8, 9), new Vec2(17, 9), new Vec2(19, 13)];
+    private skeletonPos = [new Vec2(4, 13), new Vec2(13, 18), new Vec2(13, 4), new Vec2(14, 5), new Vec2(17, 18), new Vec2(21, 22)];
+    private healthpotsPos = [new Vec2(15, 12), new Vec2(23, 4), new Vec2(15, 14), new Vec2(21, 15)];
+    private signs = [new Vec2(20 * 32, 39 * 32)];
+    
     loadScene() {
         super.loadScene();
-        this.load.tilemap("level", "assets/tilemaps/Ice-1.json");
+        this.load.tilemap("level", "assets/tilemaps/Ice-2.json");
 
         //LOADING AUDIO
         this.load.audio("bow", "assets/sounds/arrow_sound.wav");
@@ -31,21 +22,20 @@ export default class Ice1 extends GameLevel {
         this.load.audio("hit", "assets/sounds/impact.wav");
         this.load.audio("dragon", "assets/sounds/dragon.wav");
         this.load.audio("walk", "assets/sounds/walk3.wav");
-        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
-        
+
     }
 
     unloadScene() {
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+
     }
-
     startScene() {
-        this.playerSpawn = new Vec2(3,3);
+        this.playerSpawn = new Vec2(25,46);
 
-        this.keyPos = [new Vec2(1, 10), new Vec2(22, 3)];
-        this.doorPos = new Vec2(13 * 32, 12 * 32);
+        this.keyPos = [new Vec2(7, 37), new Vec2(44, 42)];
+        this.doorPos = new Vec2(25 * 32 + .5, 34 * 32);
 
-        this.nextScene = Ice2;
+        this.nextScene = DragonEntrance;
 
         super.startScene();
         this.mapType = 'ice';
@@ -55,17 +45,15 @@ export default class Ice1 extends GameLevel {
         this.ground = <OrthogonalTilemap>tilemapsLayer[0].getItems()[0];
 
         let tilemapSize = this.walls.size;
+        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.healthpotsPos.forEach(pos => {
             this.addHealthPotion(pos);
         });
 
         this.initPlayer();
-        this.viewport.setCenter(600,400);
         this.initViewport();
         this.initDialogueUI();
-
-        this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
         this.skeletonPos.forEach(pos => {
             this.addEnemy("skeletonArcher", pos, {
@@ -98,33 +86,20 @@ export default class Ice1 extends GameLevel {
             this.addKeys(pos);
         })
 
-        this.numKeys = 2;
-
         this.addDoor();
 
-        this.overlay.position = new Vec2(this.viewport.getCenter().x/2, this.viewport.getCenter().y/2)
-
-        this.forced = [new Rect(new Vec2(3 * 32, 3 * 32), new Vec2(64, 64))];
-        this.optional = [new Rect(new Vec2(14 * 32, 7 * 32), new Vec2(40, 40))];
+        this.forced = [new Rect(new Vec2(25 * 32, 47 * 32), new Vec2(64, 64)), new Rect(new Vec2(20 * 32, 39 * 32), new Vec2(40, 40))];
+        this.optional = [];
         this.dialogueList = [
-            ["Entering Ice Dungeon...", "The dragon must be close!", "It absorbed all the heat from this area."],
-            ["Watch out", "The ice is slipper."]
+            ["Entering Ice Dungeon: Chamber Two..."],
+            ["The ice breaks after you step on it. Tread carefully."]
         ];
-        // this.dialogue = new Dialogue(this.sentences, this, this.textBox, this.text);
-
     }
-
     updateScene(deltaT: number) {
         super.updateScene(deltaT);
-
-        // if(Input.isKeyJustPressed("r")) {
-        //     if(this.dialogue.isStarted)
-        //         this.dialogue.getNextLine();
-        //     else {
-        //         this.dialogue.startDialogue();
-        //     }
-        // }
-
     }
 
+    // handleIceBreak() {
+    //     if (this.player.)
+    // }
 }

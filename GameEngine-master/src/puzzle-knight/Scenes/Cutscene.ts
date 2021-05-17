@@ -29,7 +29,9 @@ export default class Cutscene extends Scene {
         this.load.audio('music', "assets/sounds/DungeonSoundtrack.wav");
     }
 
-    unloadScene() {     }
+    unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+    }
 
     startScene() {
         this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key:"music", loop:true});

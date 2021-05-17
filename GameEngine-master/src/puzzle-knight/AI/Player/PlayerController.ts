@@ -22,6 +22,9 @@ import Player_Slide from "./Player_Slide";
 export default class PlayerController extends StateMachineAI implements BattlerAI{
     health: number = 5
     owner: AnimatedSprite
+    static level = 1;
+    static xp = 0;
+
 
     //movement
     direction: Vec2
@@ -48,6 +51,7 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
     meleeDamage: number = 40;
     rangeDamage: number = 20;
+    
 
     initializeAI(owner: AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
@@ -84,13 +88,15 @@ export default class PlayerController extends StateMachineAI implements BattlerA
 
         this.initialize("idle");
 
+        
+
     }
 
     activate(options: Record<string, any>) {    }
 
     update(deltaT: number): void {
         super.update(deltaT);
-
+        this.meleeDamage = 40 + (3 * PlayerController.level);
         /*
         if(!this.scene.alive){
             return;

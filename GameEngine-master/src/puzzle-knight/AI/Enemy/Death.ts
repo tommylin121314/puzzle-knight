@@ -1,5 +1,6 @@
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import EnemyState from "./EnemyState";
+import PlayerController from "../Player/PlayerController";
 
 export default class Death extends EnemyState {
 
@@ -12,6 +13,12 @@ export default class Death extends EnemyState {
 
     onExit() {
         this.owner.destroy();
+        PlayerController.xp += 1;
+        if (PlayerController.xp == PlayerController.level){
+            PlayerController.xp = 0;
+            PlayerController.level += 1;
+
+        }
         return {};
     }
 

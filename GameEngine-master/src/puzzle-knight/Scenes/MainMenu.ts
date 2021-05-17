@@ -15,6 +15,7 @@ import DragonEntrance from "./DragonEntrance";
 import EnterBossCS from "./EnterBossCS";
 import grassLevel from "./grassLevel";
 import Ice1 from "./Ice1";
+import Ice2 from "./Ice2";
 import IntroCS from "./IntroCS";
 import MidFightCS from "./MidFightCS";
 import purpleDungeonLevel from "./purpleDungeonLevel";
@@ -176,22 +177,28 @@ export default class MainMenu extends Scene {
         this.level5.onClick = () => {
             //if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(DragonEntrance, {}, sceneOptions);
+            this.sceneManager.changeToScene(Ice2, {}, sceneOptions);
         }
 
         this.level6.onClick = () => {
             //if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
+            this.sceneManager.changeToScene(DragonEntrance, {}, sceneOptions);
         }
 
         this.level7.onClick = () => {
             //if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
-            this.sceneManager.changeToScene(BossRoom1, {}, sceneOptions);
+            this.sceneManager.changeToScene(EnterBossCS, {}, sceneOptions);
         }
 
         this.level8.onClick = () => {
+            //if (!this.levelSelectIsOpen) return;
+            let sceneOptions = {}
+            this.sceneManager.changeToScene(BossRoom1, {}, sceneOptions);
+        }
+
+        this.level9.onClick = () => {
             //if (!this.levelSelectIsOpen) return;
             let sceneOptions = {}
             this.sceneManager.changeToScene(MidFightCS, {}, sceneOptions);
@@ -286,10 +293,11 @@ export default class MainMenu extends Scene {
         this.level2 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x-350, center.y+75), text: "II.Lush Plains"});
         this.level3 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x-350, center.y+150), text: "III.Dark Dungeon"});
         this.level4 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y), text: "IV.Frozen Biome"});
-        this.level5 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+75), text: "V.Den's Entrance"});
-        this.level6 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+150), text: "VI.Enter Den Cutscene"});
-        this.level7 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y), text: "VII.Dragon Battle"});
-        this.level8 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y+75), text: "VIII.After Fight"});
+        this.level5 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+75), text: "V.Frozen Biome II"});
+        this.level6 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+150), text: "VI.Den's Entrance"});
+        this.level7 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y), text: "VII.Enter Den Cutscene"});
+        this.level8 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y+75), text: "VIII.Dragon Battle"});
+        this.level9 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x+350, center.y+150), text: "X.After Fight"});
         let close = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x, center.y+300), text: "Close"});
         close.onClick =() => {
             this.mainMenu.setHidden(false);

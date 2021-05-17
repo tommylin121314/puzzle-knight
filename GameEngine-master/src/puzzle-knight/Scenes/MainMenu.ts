@@ -305,10 +305,10 @@ export default class MainMenu extends Scene {
         let talk = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y + 75), text:'Talk/Interact: R'});
         let switchWeapon = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y + 150), text:'Switch Weapon: Q'});
         let cheats = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 200), text:'CHEATS'});
-        let keys = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 150), text:'Give player all keys on level'});
-        let speed = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 75), text:'Toggle super speed'});
-        let heal = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y), text:'Fully heals player'});
-        let mm = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y+75), text:'Return to Main Menu'});
+        let keys = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 150), text:'Give player all keys on level: K'});
+        let speed = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y - 75), text:'Toggle super speed: L'});
+        let heal = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y), text:'Fully heals player: O'});
+        let mm = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y+75), text:'Return to Main Menu: M'});
         let closeControls = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y+300), text: "Close"});
 
         closeControls.onClick = () => {

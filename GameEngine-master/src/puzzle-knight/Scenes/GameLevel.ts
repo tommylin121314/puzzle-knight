@@ -276,7 +276,7 @@ export default class GameLevel extends Scene {
                                 this.dialogue = new Dialogue(["Door is locked.", "Find all the keys"], this, this.textBox, this.text, this.overlay, false);
                                 this.dialogue.startDialogue();
                             }
-                            else if(this.checkForUnbrokenIce()) {
+                            else if((this.mapType == 'ice') && this.checkForUnbrokenIce()) {
                                 (<PlayerController>this.player.ai).changeState("death");
                                 // this.dialogue = new Dialogue(["You failed to break all the ice."], this, this.textBox, this.text, this.overlay, false);
                                 // this.dialogue.startDialogue();
@@ -394,7 +394,7 @@ export default class GameLevel extends Scene {
                 }
 
                 case "PLAYER_DIED": {
-                    if(this.checkForUnbrokenIce()) {
+                    if((this.mapType == 'ice') && this.checkForUnbrokenIce()) {
                         this.dialogue = new Dialogue(["You failed to break all the ice."], this, this.textBox, this.text, this.overlay, false);
                         this.dialogue.startDialogue();
                         let dialogueTimer = new Timer(2000, () => {

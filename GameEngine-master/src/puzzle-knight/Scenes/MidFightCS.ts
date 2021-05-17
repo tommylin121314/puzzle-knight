@@ -11,10 +11,11 @@ export default class MidFightCS extends Cutscene {
     started: boolean;
 
     loadScene() {
+        this.load.audio("soundtrack", "assets/sounds/BossSoundtrack.wav");
     }
 
     unloadScene() {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'soundtrack'});
 
     }
 

@@ -11,10 +11,11 @@ export default class EnterBossCS extends Cutscene {
 
     loadScene() {
         this.load.image("splashart", "assets/sprites/MeetingDragonInCave.png");
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
     }
 
     unloadScene() {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'soundtrack'});
 
     }
 

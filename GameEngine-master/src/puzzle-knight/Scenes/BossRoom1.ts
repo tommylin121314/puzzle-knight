@@ -36,7 +36,7 @@ export default class BossRoom1 extends GameLevel {
     }
 
     unloadScene() {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'soundtrack'});
 
     }
 

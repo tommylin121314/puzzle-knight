@@ -22,10 +22,11 @@ export default class DragonEntrance extends GameLevel {
     loadScene() {
         super.loadScene();
         this.load.tilemap("level", "assets/tilemaps/DragonEntrance.json");
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
     }
 
     unloadScene() {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'soundtrack'});
 
     }
 

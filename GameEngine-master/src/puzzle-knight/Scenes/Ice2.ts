@@ -23,11 +23,12 @@ export default class Ice2 extends GameLevel {
         this.load.audio("hit", "assets/sounds/impact.wav");
         this.load.audio("dragon", "assets/sounds/dragon.wav");
         this.load.audio("walk", "assets/sounds/walk3.wav");
+        this.load.audio("soundtrack", "assets/sounds/DungeonSoundtrack.wav");
 
     }
 
     unloadScene() {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'soundtrack'});
 
     }
     startScene() {

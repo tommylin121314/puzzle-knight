@@ -56,6 +56,10 @@ export default class MainMenu extends Scene {
         
         
     }
+    unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+
+    }
 
     startScene() {
         this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key:"music", loop:true});

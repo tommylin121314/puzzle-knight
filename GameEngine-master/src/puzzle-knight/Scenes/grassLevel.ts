@@ -26,6 +26,7 @@ export default class grassLevel extends GameLevel {
     }
 
     unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
 
     }
 

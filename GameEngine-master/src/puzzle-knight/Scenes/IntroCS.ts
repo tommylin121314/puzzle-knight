@@ -1,4 +1,5 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import BossRoom1 from "./BossRoom1";
 import Cutscene from "./Cutscene";
 import grassLevel from "./grassLevel";
@@ -14,6 +15,7 @@ export default class IntroCS extends Cutscene {
     }
 
     unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
 
     }
 

@@ -57,14 +57,13 @@ export default class DragonEntrance extends GameLevel {
 
         this.viewport.setBounds(0, -20, tilemapSize.x, tilemapSize.y);
 
-        this.viewport.setZoomLevel(3);
+        this.viewport.setZoomLevel(4);
         this.addDoor();
         this.numKeys = 0;
 
-        this.forced = [new Rect(new Vec2(2 * 32, 5 * 32), new Vec2(64, 64))];
+        this.forced = [];
         this.optional = [];
         this.dialogueList = [
-            ["That must be the entrance to the dragon's den.", "This heat is oppressive.", "The land is completely charred."]
         ];
 
     }

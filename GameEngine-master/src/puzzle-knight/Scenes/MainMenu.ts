@@ -27,6 +27,7 @@ export default class MainMenu extends Scene {
     private levels: Layer;
     private controls: Layer;
     private aboutL: Layer;
+    private background: Layer;
     private about: Sprite;
     private popUpIsOpen: Boolean;
     private levelSelectIsOpen: Boolean;
@@ -52,9 +53,24 @@ export default class MainMenu extends Scene {
         this.load.image("logo", "assets/sprites/puzzle-knight-logo.png");
         this.load.image("controls", "assets/sprites/controls.png");
         this.load.image("about", "assets/sprites/about.png");
-        this.load.audio("music", "assets/sounds/DungeonSoundtrack.wav")
-        
-        
+        this.load.audio("music", "assets/sounds/DungeonSoundtrack.wav");
+        this.load.image("playButton", "assets/sprites/Play-1.png.png");
+        this.load.image("aboutButton", "assets/sprites/About-2.png.png");
+        this.load.image("levelsButton", "assets/sprites/Levels-3.png.png");
+        this.load.image("helpButton", "assets/sprites/Help-4.png.png");
+        this.load.image("background", "assets/sprites/MainMenuBackground.png")
+        this.load.image("close", "assets/sprites/Close.png");
+        this.load.image("textBackground", "assets/sprites/SignBackground.png");
+        this.load.image("aboutText", "assets/sprites/puzzleKnightAbout.png");
+        this.load.image("level1", "assets/sprites/introcutscene.png")
+        this.load.image("level2", "assets/sprites/lushplains.png")
+        this.load.image("level3", "assets/sprites/darkDungeon.png")
+        this.load.image("level4", "assets/sprites/slipperyBiome.png")
+        this.load.image("level5", "assets/sprites/frozenChasm.png")
+        this.load.image("level6", "assets/sprites/densEntrance.png")
+        this.load.image("level7", "assets/sprites/meetDragon.png")
+        this.load.image("level8", "assets/sprites/dragonFight.png")
+        this.load.image("level9", "assets/sprites/postBattle.png")
     }
 
     startScene() {
@@ -70,6 +86,7 @@ export default class MainMenu extends Scene {
         this.levelSelectIsOpen = false;
 
         //////****** MAIN MENU *******///////
+        this.background = this.addLayer("background");
         this.mainMenu = this.addUILayer("mainMenu");
         this.levels = this.addUILayer("levels");
         this.controls = this.addUILayer("controls");
@@ -85,6 +102,10 @@ export default class MainMenu extends Scene {
         logo.position = new Vec2(center.x, center.y-200);
         logo.scale = new Vec2(10,7);
 
+        const background = this.add.sprite("background", "background");
+        background.scale= new Vec2(15,15);
+        background.alpha = 0.9;
+        background.position = new Vec2(center.x, center.y);
         this.addUI();
 
 
@@ -247,34 +268,49 @@ export default class MainMenu extends Scene {
 
         const center = this.viewport.getCenter();
         //play button
-        this.playButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y+75), text: "Play"});
-        this.playButton.size.set(500, 110);
+        this.playButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x-150, center.y+75), text: "Play"});
+        let playImage = this.add.sprite("playButton", "mainMenu");
+        this.playButton.size.set(350, 110);
         this.playButton.borderWidth = 3;
         this.playButton.borderColor = Color.WHITE;
         this.playButton.backgroundColor = Color.BLACK;
         this.playButton.onClickEventId = "play";
+        playImage.position = new Vec2(center.x-150, center.y+75);
+        playImage.scale = new Vec2(8, 8);
 
         //about button
-        this.aboutButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x-140, center.y+220), text: "About"});
-        this.aboutButton.size.set(220, 100);
+        this.aboutButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x-180, center.y+220), text: "About"});
+        this.aboutButton.size.set(300, 80);
+        let aboutImage = this.add.sprite("aboutButton", "mainMenu");
         this.aboutButton.borderWidth = 3;
         this.aboutButton.borderColor = Color.WHITE;
         this.aboutButton.backgroundColor = Color.BLACK;
         this.aboutButton.onClickEventId = "about";
+        aboutImage.position = new Vec2(center.x-180, center.y+220);
+        aboutImage.scale = new Vec2(8,8);
 
         //controls button
-        this.controlsButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x+140, center.y+220), text: "Controls"});
+        this.controlsButton = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x+185, center.y+75), text: "Controls"});
         this.controlsButton.size.set(220, 100);
+        let controlImage = this.add.sprite("helpButton", "mainMenu");
         this.controlsButton.borderWidth = 3;
         this.controlsButton.borderColor = Color.WHITE;
         this.controlsButton.backgroundColor = Color.BLACK;
         this.controlsButton.onClickEventId = "controls";
+        controlImage.position = new Vec2(center.x+185, center.y+75);
+        controlImage.scale = new Vec2(8,8);
 
         //close popup button
         this.closeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "aboutL", {position: new Vec2(center.x, center.y+300), text: "Close"});
+        let closeImage = this.add.sprite("close", "aboutL");
+        closeImage.position = new Vec2(center.x, center.y+300);
+        closeImage.scale = new Vec2(3, 3);
 
         //////****** ABOUT *******/////// make this a sprite
-        this.about = this.add.sprite("about", "aboutL");
+        let aboutBackground = this.add.sprite("textBackground", "aboutL");
+        aboutBackground.position = new Vec2(center.x, center.y);
+        aboutBackground.scale = new Vec2(20,10);
+        this.about = this.add.sprite("aboutText", "aboutL");
         this.about.position = new Vec2(center.x, center.y);
 
         //////****** CONTROLS *******///////
@@ -283,10 +319,14 @@ export default class MainMenu extends Scene {
         this.control.alpha = 0;
 
         //////****** LEVEL SELECT *******///////
-        this.levelSelect = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x, center.y+350), text: "Level Select"});
+        this.levelSelect = <Button>this.add.uiElement(UIElementType.BUTTON, "mainMenu", {position: new Vec2(center.x+185, center.y+220), text: "Level Select"});
         this.levelSelect.borderWidth = 3;
+        this.levelSelect.size.set(300, 80);
         this.levelSelect.borderColor = Color.WHITE;
         this.levelSelect.backgroundColor = Color.BLACK;
+        let levelImage = this.add.sprite("levelsButton", "mainMenu");
+        levelImage.position = new Vec2(center.x + 185, center.y + 220);
+        levelImage.scale = new Vec2(8,8);
 
         this.levelSelectHeader = <Label>this.add.uiElement(UIElementType.LABEL, "levels", {position: new Vec2(center.x, center.y - 150), text:'LEVELS'});
         this.level1 = <Button>this.add.uiElement(UIElementType.BUTTON, "levels", {position: new Vec2(center.x-350, center.y), text: "I.Intro Cutscene"});
@@ -306,6 +346,32 @@ export default class MainMenu extends Scene {
             this.aboutL.setHidden(true);
         }
 
+        let levelsBackground = this.add.sprite("textBackground", "levels");
+        levelsBackground.position = new Vec2(center.x, center.y);
+        levelsBackground.scale = new Vec2(20,10);
+        let levelsSign = this.add.sprite("levelsButton", "levels");
+        levelsSign.position = new Vec2(center.x, center.y-150);
+        levelsSign.scale = new Vec2(8,8);
+        let l1 = this.add.sprite("level1", "levels");
+        l1.position = this.level1.position;
+        let l2 = this.add.sprite("level2", "levels");
+        l2.position = this.level2.position;
+        let l3 = this.add.sprite("level3", "levels");
+        l3.position = this.level3.position;
+        let l4 = this.add.sprite("level4", "levels");
+        l4.position = this.level4.position;
+        let l5 = this.add.sprite("level5", "levels");
+        l5.position = this.level5.position;
+        let l6 = this.add.sprite("level6", "levels");
+        l6.position = this.level6.position;
+        let l7 = this.add.sprite("level7", "levels");
+        l7.position = this.level7.position;
+        let l8 = this.add.sprite("level8", "levels");
+        l8.position = this.level8.position;
+        let l9 = this.add.sprite("level9", "levels");
+        l9.position = this.level9.position;
+
+
         let controlsHeader = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y - 250), text:'CONTROLS'});
         let move = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y - 150), text:'move: W,A,S,D'});
         let attack = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x - 200, center.y -75), text:'Mouse Click'});
@@ -318,6 +384,13 @@ export default class MainMenu extends Scene {
         let heal = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y), text:'Fully heals player: O'});
         let mm = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x+200, center.y+75), text:'Return to Main Menu: M'});
         let closeControls = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y+300), text: "Close"});
+
+        let closeImage2 = this.add.sprite("close", "controls");
+        closeImage2.position = new Vec2(center.x, center.y+300);
+        closeImage2.scale = new Vec2(3, 3);
+        let closeImage3 = this.add.sprite("close", "levels");
+        closeImage3.position = new Vec2(center.x, center.y+300);
+        closeImage3.scale = new Vec2(3, 3);
 
         closeControls.onClick = () => {
             this.mainMenu.setHidden(false);

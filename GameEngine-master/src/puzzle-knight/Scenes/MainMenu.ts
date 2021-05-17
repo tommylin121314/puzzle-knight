@@ -72,6 +72,10 @@ export default class MainMenu extends Scene {
         this.load.image("level8", "assets/sprites/dragonFight.png")
         this.load.image("level9", "assets/sprites/postBattle.png")
     }
+    unloadScene() {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: 'music'});
+
+    }
 
     startScene() {
         this.emitter.fireEvent(GameEventType.PLAY_MUSIC, {key:"music", loop:true});

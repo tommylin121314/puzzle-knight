@@ -22,6 +22,7 @@ import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Dialogue from "../GameSystem/Dialogue";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
+import Ice2 from "./Ice2";
 
 export default class GameLevel extends Scene {
     static playerArrowDamage = 15;
@@ -43,7 +44,7 @@ export default class GameLevel extends Scene {
 
     protected walls: OrthogonalTilemap;
     protected ground: OrthogonalTilemap;
-    public mapType: string; //"ice", "boss", "grass", "fire", "castle"
+    public mapType: string; //"ice", "ice2", "boss", "grass", "fire", "castle"
     
     protected forced: Array<Rect>;
     protected optional: Array<Rect>;
@@ -275,6 +276,12 @@ export default class GameLevel extends Scene {
                                 this.dialogue = new Dialogue(["Door is locked.", "Find all the keys"], this, this.textBox, this.text, this.overlay, false);
                                 this.dialogue.startDialogue();
                             }
+                            else if((this.mapType == 'ice2') && this.checkForUnbrokenIce()) {
+                                (<PlayerController>this.player.ai).changeState("death");
+                                // this.dialogue = new Dialogue(["You failed to break all the ice."], this, this.textBox, this.text, this.overlay, false);
+                                // this.dialogue.startDialogue();
+                                // this.sceneManager.changeToScene(MainMenu, {}, {});
+                            }
                             else {
                                 let sceneOptions = {
                                     physics: {
@@ -387,7 +394,18 @@ export default class GameLevel extends Scene {
                 }
 
                 case "PLAYER_DIED": {
-                    this.sceneManager.changeToScene(MainMenu, {}, {});
+                    if((this.mapType == 'ice2') && this.checkForUnbrokenIce()) {
+                        this.dialogue = new Dialogue(["You failed to break all the ice."], this, this.textBox, this.text, this.overlay, false);
+                        this.dialogue.startDialogue();
+                        let dialogueTimer = new Timer(2000, () => {
+                            // console.log("let the dialogue run for a bit");
+                            this.sceneManager.changeToScene(MainMenu, {}, {});
+                        })
+                        dialogueTimer.start();
+                    }
+                    else {
+                        this.sceneManager.changeToScene(MainMenu, {}, {});
+                    }
                     break;
                 }
             }
@@ -576,6 +594,15 @@ export default class GameLevel extends Scene {
         let healthpot = this.add.sprite("healthpot", "primary");
         healthpot.position.set(pos.x * 32 + 16, pos.y * 32 + 16);
         this.healthpots.push(healthpot);
+    }
+
+    protected checkForUnbrokenIce(): boolean {
+        for (let i = 0; i < (<PlayerController>this.player.ai).ground.getDimensions().x; i++) {
+            for (let j = 0; j < (<PlayerController>this.player.ai).ground.getDimensions().y; j++) {
+                if ((<PlayerController>this.player.ai).ground.getTileAtRowCol(new Vec2(i, j))) return true;
+            }
+        }
+        return false;
     }
 
     protected checkForForcedDialogue(): boolean {
